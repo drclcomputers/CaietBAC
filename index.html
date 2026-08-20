@@ -12,7 +12,6 @@
             content="Caiet de studiu pentru BAC la Limba și Literatura Română — poezii, proză, curente literare."
         />
 
-        <!-- Fonts: a literary serif for titles, a quiet grotesk for UI -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -20,7 +19,6 @@
             rel="stylesheet"
         />
 
-        <!-- Tailwind (Play CDN — no build step needed) -->
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = {
@@ -74,7 +72,6 @@
         >
             <div class="max-w-6xl mx-auto px-4 sm:px-6">
                 <div class="h-16 flex items-center gap-3">
-                    <!-- Wordmark -->
                     <a
                         href="#"
                         class="flex items-center gap-2 shrink-0 group"
@@ -158,17 +155,15 @@
                     </button>
                 </div>
 
-                <!-- Category pills -->
+                <!-- Categories -->
                 <div
                     id="filter-pills"
                     class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3 -mt-0.5"
                 >
-                    <!-- injected by app.js -->
                 </div>
             </div>
         </header>
 
-        <!-- ============ MAIN ============ -->
         <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
             <div class="mb-6 flex items-baseline justify-between">
                 <h1
@@ -186,7 +181,6 @@
                 id="study-grid"
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
             >
-                <!-- cards injected by app.js -->
             </div>
 
             <div
@@ -222,7 +216,6 @@
             originale sunt indicate la fiecare fișă.
         </footer>
 
-        <!-- ============ MODAL / FOCUS VIEWER ============ -->
         <div
             id="modal-root"
             class="fixed inset-0 z-50 hidden"

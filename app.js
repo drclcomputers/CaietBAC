@@ -1,8 +1,5 @@
-// ============================================================
-// Caiet BAC — app.js
 // Renders study cards from STUDY_ITEMS (data.js), handles search,
 // category filtering, dark mode, and the focus-viewer modal.
-// ============================================================
 
 (function () {
     "use strict";
@@ -11,6 +8,7 @@
         { id: "all", label: "Toate" },
         { id: "poezie", label: "Poezie" },
         { id: "proza", label: "Proză" },
+        { id: "teatru", label: "Teatru" },
         { id: "curente", label: "Curente literare" },
         { id: "repere", label: "Repere" },
     ];
@@ -18,6 +16,7 @@
     const TAG_CLASS = {
         poezie: "tag-poezie",
         proza: "tag-proza",
+        teatru: "tag-teatru",
         curente: "tag-curente",
         repere: "tag-repere",
     };
@@ -61,9 +60,7 @@
     const $modalPrevWork = document.getElementById("modal-prev-work");
     const $modalNextWork = document.getElementById("modal-next-work");
 
-    // ============================================================
     // THEME
-    // ============================================================
     function initTheme() {
         const saved = localStorage.getItem("bac-theme");
         const prefersDark = window.matchMedia(
@@ -77,9 +74,7 @@
         localStorage.setItem("bac-theme", isDark ? "dark" : "light");
     });
 
-    // ============================================================
     // FILTER PILLS
-    // ============================================================
     function renderPills() {
         $pills.innerHTML = "";
         CATEGORIES.forEach((cat) => {
@@ -98,9 +93,7 @@
         });
     }
 
-    // ============================================================
     // SEARCH + FILTER
-    // ============================================================
     function normalize(str) {
         return (str || "")
             .toString()
@@ -163,9 +156,7 @@
         }
     });
 
-    // ============================================================
     // GRID / CARDS
-    // ============================================================
     function renderGrid() {
         $grid.innerHTML = "";
         $count.textContent =
@@ -235,9 +226,7 @@
         return div.innerHTML;
     }
 
-    // ============================================================
     // MODAL / FOCUS VIEWER
-    // ============================================================
     function openModal(workIndex) {
         state.modal.open = true;
         state.modal.workIndex = workIndex;
@@ -419,9 +408,7 @@
         );
     })();
 
-    // ============================================================
     // INIT
-    // ============================================================
     initTheme();
     renderPills();
     applyFilters();
