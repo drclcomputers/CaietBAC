@@ -1,397 +1,1949 @@
-// Auto-generated from BAC Romana study materials
+const CATEGORIES = [
+    { id: "all", label: "Toate" },
+    { id: "poezie", label: "Poezie" },
+    { id: "proza", label: "Proză" },
+    { id: "teatru", label: "Teatru" },
+    { id: "curente", label: "Curente" },
+    { id: "repere", label: "Repere" },
+    { id: "metode", label: "Metode" },
+];
 const STUDY_ITEMS = [
-  {
-    "id": "repere-tipurile-de-text",
-    "title": "Tipurile de text",
-    "author": null,
-    "category": "repere",
-    "movement": null,
-    "images": [
-      "assets/repere/tipurile-de-text/1.jpg"
-    ],
-    "source": null
-  },
-  {
-    "id": "curente-modernismul",
-    "title": "Modernismul",
-    "author": null,
-    "category": "curente",
-    "movement": null,
-    "images": [
-      "assets/curente/modernismul/1.jpg",
-      "assets/curente/modernismul/2.jpg",
-      "assets/curente/modernismul/3.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1544894630332403&id=100044356422713&rdid=Z9mQSs8mda2k9lbr"
-  },
-  {
-    "id": "curente-neomodernismul",
-    "title": "Neomodernismul",
-    "author": null,
-    "category": "curente",
-    "movement": null,
-    "images": [
-      "assets/curente/neomodernismul/1.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1554023562752843&id=100044356422713&rdid=12cwycps8SxLDkbY"
-  },
-  {
-    "id": "curente-realismul",
-    "title": "Realismul",
-    "author": null,
-    "category": "curente",
-    "movement": null,
-    "images": [
-      "assets/curente/realismul/1.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1546085776879955&id=100044356422713&rdid=QkvZ0AU65OD8eDSl"
-  },
-  {
-    "id": "curente-romantismul",
-    "title": "Romantismul",
-    "author": null,
-    "category": "curente",
-    "movement": null,
-    "images": [
-      "assets/curente/romantismul/1.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1544138783741321&id=100044356422713&rdid=CzyJYsJP4XehYx7u"
-  },
-  {
-    "id": "curente-simbolismul",
-    "title": "Simbolismul",
-    "author": null,
-    "category": "curente",
-    "movement": null,
-    "images": [
-      "assets/curente/simbolismul/1.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1544128820408984&id=100044356422713&rdid=EGCqLVFAqno7D6li"
-  },
-  {
-    "id": "poezie-umbra-lui-mircea-la-cozia",
-    "title": "Umbra lui Mircea la Cozia",
-    "author": "Grigore Alexandrescu",
-    "category": "poezie",
-    "movement": "Poezie pașoptistă",
-    "images": [
-      "assets/poezie/umbra-lui-mircea-la-cozia/1.jpg",
-      "assets/poezie/umbra-lui-mircea-la-cozia/2.jpg",
-      "assets/poezie/umbra-lui-mircea-la-cozia/3.jpg",
-      "assets/poezie/umbra-lui-mircea-la-cozia/4.jpg",
-      "assets/poezie/umbra-lui-mircea-la-cozia/5.jpg"
-    ],
-    "source": "https://web.facebook.com/noualimba/posts/pfbid033QWxoLjSbENnBrqWjCpmJ2V1ATTFBApXvdkA6LFXLtbTane2PuyJRrFfR87CkDLZl"
-  },
-  {
-    "id": "poezie-malul-siretului",
-    "title": "Malul Siretului",
-    "author": "Vasile Alecsandri",
-    "category": "poezie",
-    "movement": "Poezie pașoptistă",
-    "images": [
-      "assets/poezie/malul-siretului/1.jpg"
-    ],
-    "source": "https://www.scribd.com/doc/2609818/Malul-Siretului"
-  },
-  {
-    "id": "poezie-luceafarul",
-    "title": "Luceafărul",
-    "author": "Mihai Eminescu",
-    "category": "poezie",
-    "movement": "Poezie romantică",
-    "images": [
-      "assets/poezie/luceafarul/1.jpg",
-      "assets/poezie/luceafarul/2.jpg",
-      "assets/poezie/luceafarul/3.jpg",
-      "assets/poezie/luceafarul/4.jpg",
-      "assets/poezie/luceafarul/5.jpg",
-      "assets/poezie/luceafarul/6.jpg"
-    ],
-    "source": "https://web.facebook.com/noualimba/posts/pfbid0kSyLjLVK8LEpvpfAoe5cypFDVi7arcwP9uXh5auYfFFNymVP4owUE2Y8FCrFpfUfl"
-  },
-  {
-    "id": "poezie-floare-albastra",
-    "title": "Floare albastră",
-    "author": "Mihai Eminescu",
-    "category": "poezie",
-    "movement": "Poezie romantică",
-    "images": [
-      "assets/poezie/floare-albastra/1.jpg",
-      "assets/poezie/floare-albastra/2.jpg",
-      "assets/poezie/floare-albastra/3.jpg",
-      "assets/poezie/floare-albastra/4.jpg",
-      "assets/poezie/floare-albastra/5.jpg",
-      "assets/poezie/floare-albastra/6.jpg",
-      "assets/poezie/floare-albastra/7.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1545764920245374&id=100044356422713&rdid=PGHBJeFtjS11ISB0"
-  },
-  {
-    "id": "poezie-plumb",
-    "title": "Plumb",
-    "author": "George Bacovia",
-    "category": "poezie",
-    "movement": "Poezie simbolistă",
-    "images": [
-      "assets/poezie/plumb/1.jpg",
-      "assets/poezie/plumb/2.jpg",
-      "assets/poezie/plumb/3.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1545274700294396&id=100044356422713&rdid=PXAGP0FcB3hCqyxY"
-  },
-  {
-    "id": "poezie-lacustra",
-    "title": "Lacustră",
-    "author": "George Bacovia",
-    "category": "poezie",
-    "movement": "Poezie simbolistă",
-    "images": [
-      "assets/poezie/lacustra/1.jpg"
-    ],
-    "source": "https://web.facebook.com/lumea.poeziilor/posts/lacustr%C4%83-george-bacovia/1508321372645959/?_rdc=1&_rdr"
-  },
-  {
-    "id": "poezie-flori-de-mucigai",
-    "title": "Flori de mucigai",
-    "author": "Tudor Arghezi",
-    "category": "poezie",
-    "movement": "Poezie modernistă",
-    "images": [
-      "assets/poezie/flori-de-mucigai/1.jpg",
-      "assets/poezie/flori-de-mucigai/2.jpg",
-      "assets/poezie/flori-de-mucigai/3.jpg",
-      "assets/poezie/flori-de-mucigai/4.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1558770085611524&id=100044356422713&rdid=cPUo3XLoewLBevqT"
-  },
-  {
-    "id": "poezie-testament",
-    "title": "Testament",
-    "author": "Tudor Arghezi",
-    "category": "poezie",
-    "movement": "Poezie modernistă",
-    "images": [
-      "assets/poezie/testament/1.jpg",
-      "assets/poezie/testament/2.jpg",
-      "assets/poezie/testament/3.jpg",
-      "assets/poezie/testament/4.jpg",
-      "assets/poezie/testament/5.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1547700850051781&id=100044356422713&rdid=5BEEDUc0uoXjrxSW"
-  },
-  {
-    "id": "poezie-riga-crypto-si-lapona-enigel",
-    "title": "Riga Crypto și lapona Enigel",
-    "author": "Ion Barbu",
-    "category": "poezie",
-    "movement": "Poezie modernistă",
-    "images": [
-      "assets/poezie/riga-crypto-si-lapona-enigel/1.jpg",
-      "assets/poezie/riga-crypto-si-lapona-enigel/2.jpg",
-      "assets/poezie/riga-crypto-si-lapona-enigel/3.jpg",
-      "assets/poezie/riga-crypto-si-lapona-enigel/4.jpg",
-      "assets/poezie/riga-crypto-si-lapona-enigel/5.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1557578932397306&id=100044356422713&rdid=3WysCdGBrDAqNuOK"
-  },
-  {
-    "id": "poezie-eu-nu-strivesc-corola-de-minuni-a-lumii",
-    "title": "Eu nu strivesc corola de minuni a lumii",
-    "author": "Lucian Blaga",
-    "category": "poezie",
-    "movement": "Poezie modernistă",
-    "images": [
-      "assets/poezie/eu-nu-strivesc-corola-de-minuni-a-lumii/1.jpg",
-      "assets/poezie/eu-nu-strivesc-corola-de-minuni-a-lumii/2.jpg",
-      "assets/poezie/eu-nu-strivesc-corola-de-minuni-a-lumii/3.jpg",
-      "assets/poezie/eu-nu-strivesc-corola-de-minuni-a-lumii/4.jpg",
-      "assets/poezie/eu-nu-strivesc-corola-de-minuni-a-lumii/5.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1559810872174112&id=100044356422713&rdid=peq9a6VyVMPmzARs"
-  },
-  {
-    "id": "poezie-leoaica-tanara-iubirea",
-    "title": "Leoaică tânără, iubirea",
-    "author": "Nichita Stănescu",
-    "category": "poezie",
-    "movement": "Poezie neomodernistă",
-    "images": [
-      "assets/poezie/leoaica-tanara-iubirea/1.jpg",
-      "assets/poezie/leoaica-tanara-iubirea/2.jpg",
-      "assets/poezie/leoaica-tanara-iubirea/3.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1541217174033482&id=100044356422713&rdid=XInqzFfuG5y4UBxs"
-  },
-  {
-    "id": "poezie-aci-sosi-pe-vremuri",
-    "title": "Aci sosi pe vremuri",
-    "author": "Ion Pillat",
-    "category": "poezie",
-    "movement": "Poezie tradiționalistă",
-    "images": [
-      "assets/poezie/aci-sosi-pe-vremuri/1.jpg"
-    ],
-    "source": "https://poetii-nostri.ro/ion-pillat-aci-sosi-pe-vremuri-poezie-id-9660/"
-  },
-  {
-    "id": "poezie-in-gradina-ghetsemani",
-    "title": "În grădina Ghetsemani",
-    "author": "Vasile Voiculescu",
-    "category": "poezie",
-    "movement": "Poezie tradiționalistă",
-    "images": [
-      "assets/poezie/in-gradina-ghetsemani/1.jpg"
-    ],
-    "source": "https://www.romanianvoice.com/poezii/poezii/gradina.php"
-  },
-  {
-    "id": "proza-moara-cu-noroc",
-    "title": "Moara cu noroc",
-    "author": "Ioan Slavici",
-    "category": "proza",
-    "movement": "Nuvelă psihologică, realistă",
-    "images": [
-      "assets/proza/moara-cu-noroc/1.jpg",
-      "assets/proza/moara-cu-noroc/2.jpg",
-      "assets/proza/moara-cu-noroc/3.jpg",
-      "assets/proza/moara-cu-noroc/4.jpg",
-      "assets/proza/moara-cu-noroc/5.jpg",
-      "assets/proza/moara-cu-noroc/6.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1563024238519442&id=100044356422713&rdid=eoUp8o6zUh0eWanG"
-  },
-  {
-    "id": "proza-baltagul",
-    "title": "Baltagul",
-    "author": "Mihail Sadoveanu",
-    "category": "proza",
-    "movement": "Roman tradițional, obiectiv",
-    "images": [
-      "assets/proza/baltagul/1.jpg",
-      "assets/proza/baltagul/2.jpg",
-      "assets/proza/baltagul/3.jpg",
-      "assets/proza/baltagul/4.jpg",
-      "assets/proza/baltagul/5.jpg",
-      "assets/proza/baltagul/6.jpg",
-      "assets/proza/baltagul/7.jpg",
-      "assets/proza/baltagul/8.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1564322938389572&id=100044356422713&rdid=7IkTNWuDCrvRTcTD"
-  },
-  {
-    "id": "proza-ion",
-    "title": "Ion",
-    "author": "Liviu Rebreanu",
-    "category": "proza",
-    "movement": "Roman realist-obiectiv, tradițional",
-    "images": [
-      "assets/proza/ion/1.jpg",
-      "assets/proza/ion/2.jpg",
-      "assets/proza/ion/3.jpg",
-      "assets/proza/ion/4.jpg",
-      "assets/proza/ion/5.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1545833780238488&id=100044356422713&rdid=hUGmF8ukld0sASmB"
-  },
-  {
-    "id": "proza-ultima-noapte-de-dragoste-intaia-noapte-de-razboi",
-    "title": "Ultima noapte de dragoste, întâia noapte de război",
-    "author": "Camil Petrescu",
-    "category": "proza",
-    "movement": "Roman modern, subiectiv, psihologic",
-    "images": [
-      "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/1.jpg",
-      "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/2.jpg",
-      "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/3.jpg",
-      "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/4.jpg",
-      "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/5.jpg",
-      "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/6.jpg",
-      "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/7.jpg",
-      "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/8.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1546162250205641&id=100044356422713&rdid=2napzjQZPz3zbJ7G"
-  },
-  {
-    "id": "proza-enigma-otiliei",
-    "title": "Enigma Otiliei",
-    "author": "George Călinescu",
-    "category": "proza",
-    "movement": "Roman balzacian, bildungsroman",
-    "images": [
-      "assets/proza/enigma-otiliei/1.jpg",
-      "assets/proza/enigma-otiliei/2.jpg",
-      "assets/proza/enigma-otiliei/3.jpg",
-      "assets/proza/enigma-otiliei/4.jpg",
-      "assets/proza/enigma-otiliei/5.jpg",
-      "assets/proza/enigma-otiliei/6.jpg",
-      "assets/proza/enigma-otiliei/7.jpg",
-      "assets/proza/enigma-otiliei/8.jpg",
-      "assets/proza/enigma-otiliei/9.jpg",
-      "assets/proza/enigma-otiliei/10.jpg",
-      "assets/proza/enigma-otiliei/11.jpg"
-    ],
-    "source": "https://web.facebook.com/noualimba/posts/pfbid0vC2Pvhr8g2e93EM2kNAXqmf4QY3smcHiADdiikzhvuZ4wxKBpY9Kcfu3K268v9UTl"
-  },
-  {
-    "id": "proza-morometii",
-    "title": "Moromeții",
-    "author": "Marin Preda",
-    "category": "proza",
-    "movement": "Roman tradițional, obiectiv, realist",
-    "images": [
-      "assets/proza/morometii/1.jpg",
-      "assets/proza/morometii/2.jpg",
-      "assets/proza/morometii/3.jpg",
-      "assets/proza/morometii/4.jpg",
-      "assets/proza/morometii/5.jpg",
-      "assets/proza/morometii/6.jpg",
-      "assets/proza/morometii/7.jpg",
-      "assets/proza/morometii/8.jpg",
-      "assets/proza/morometii/9.jpg",
-      "assets/proza/morometii/10.jpg",
-      "assets/proza/morometii/11.jpg",
-      "assets/proza/morometii/12.jpg",
-      "assets/proza/morometii/13.jpg",
-      "assets/proza/morometii/14.jpg",
-      "assets/proza/morometii/15.jpg",
-      "assets/proza/morometii/16.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1550451129776753&id=100044356422713&rdid=fCwBgK2inCEgrtKk"
-  },
-  {
-    "id": "teatru-o-scrisoare-pierduta",
-    "title": "O scrisoare pierdută",
-    "author": "Ion Luca Caragiale",
-    "category": "teatru",
-    "movement": "Comedie",
-    "images": [
-      "assets/teatru/o-scrisoare-pierduta/1.jpg",
-      "assets/teatru/o-scrisoare-pierduta/2.jpg",
-      "assets/teatru/o-scrisoare-pierduta/3.jpg",
-      "assets/teatru/o-scrisoare-pierduta/4.jpg",
-      "assets/teatru/o-scrisoare-pierduta/5.jpg",
-      "assets/teatru/o-scrisoare-pierduta/6.jpg",
-      "assets/teatru/o-scrisoare-pierduta/7.jpg",
-      "assets/teatru/o-scrisoare-pierduta/8.jpg"
-    ],
-    "source": "https://web.facebook.com/noualimba/posts/pfbid034gEWkuYDQFBAow6M7kCQyZA7rB6XzhN4xTMg3mHku6c8TqGPZ3vWzg7GijVC7sV5l"
-  },
-  {
-    "id": "teatru-iona",
-    "title": "Iona",
-    "author": "Marin Sorescu",
-    "category": "teatru",
-    "movement": "Parabolă dramatică, teatru modern postbelic",
-    "images": [
-      "assets/teatru/iona/1.jpg",
-      "assets/teatru/iona/2.jpg",
-      "assets/teatru/iona/3.jpg",
-      "assets/teatru/iona/4.jpg",
-      "assets/teatru/iona/5.jpg",
-      "assets/teatru/iona/6.jpg",
-      "assets/teatru/iona/7.jpg"
-    ],
-    "source": "https://web.facebook.com/story.php?story_fbid=1569177564570776&id=100044356422713&rdid=WLKFAAtjWmXcQD65"
-  }
+    {
+        id: "poezie-floare-albastra",
+        title: "Floare albastră",
+        author: "Mihai Eminescu",
+        category: "poezie",
+        movement: "Romantism",
+        year: "1873",
+        genre: "liric",
+        species: "idilă / pastel / poem filozofic",
+        images: [
+            "assets/poezie/floare-albastra/1.jpg",
+            "assets/poezie/floare-albastra/2.jpg",
+            "assets/poezie/floare-albastra/3.jpg",
+            "assets/poezie/floare-albastra/4.jpg",
+            "assets/poezie/floare-albastra/5.jpg",
+            "assets/poezie/floare-albastra/6.jpg",
+            "assets/poezie/floare-albastra/7.jpg",
+        ],
+        mindmap: "harti/floare-albastra.jpg",
+        source: "https://web.facebook.com/story.php?story_fbid=1545764920245374&id=100044356422713",
+        remember: "romantism + iubire și natură + antiteză + condiția geniului",
+        conclusion:
+            "Capodoperă a creației eminesciene, prin viziunea asupra temei și originalitatea stilului. Anticipează poemul-sinteză „Luceafărul”.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Poet al Epocii Marilor Clasici",
+                    "Publicată în revista „Convorbiri literare”",
+                    "Apare în 1873 (scrisă în 1872)",
+                    "Poezie-nucleu a romantismului eminescian",
+                    "Anticipează marile creații ulterioare",
+                ],
+            },
+            {
+                title: "Specie",
+                points: [
+                    "Idilă",
+                    "Pastel",
+                    "Poem filozofic",
+                    "Poezie romantică",
+                ],
+            },
+            {
+                title: "Trăsături romantice",
+                points: [
+                    "Amestec de specii literare",
+                    "Antiteza",
+                    "Lirism de măști",
+                    "Teme și motive romantice",
+                    "Opoziția om comun / om de geniu",
+                    "Plan terestru / plan cosmic",
+                ],
+            },
+            {
+                title: "Teme",
+                points: [
+                    "Iubirea în corelație cu natura",
+                    "Condiția omului de geniu",
+                    "Timpul ireversibil",
+                ],
+            },
+            {
+                title: "Motive literare",
+                points: [
+                    "Floarea albastră",
+                    "Codrul",
+                    "Izvoarele",
+                    "Astrul selenar",
+                    "Soarele",
+                ],
+            },
+            {
+                title: "Imagini poetice",
+                points: [
+                    "Lumea geniului: stele, nori, ceruri înalte; aspirația spre absolut („întunecata mare”, „câmpii Asire”, „Piramidele-nvechite”)",
+                    "Paradisul terestru: codrul, izvoarele, valea, stânca, luna; natură ocrotitoare a iubirii; ritual erotic",
+                ],
+            },
+            {
+                title: "Titlul",
+                points: [
+                    "Simbol central al poeziei",
+                    "Albastrul = infinitul, idealul, lumea geniului",
+                    "Floarea = viața, iubirea, lumea trecătoare",
+                    "Sugerează antiteza dintre două lumi incompatibile",
+                ],
+            },
+            {
+                title: "Compoziție",
+                points: [
+                    "Patru secvențe: reproșul fetei, meditația geniului, chemarea la iubire, meditația finală asupra iubirii trecute",
+                    "Alternanța a două planuri: terestru și cosmic",
+                    "Ipostază feminină și ipostază masculină",
+                ],
+            },
+        ],
+    },
+    {
+        id: "poezie-luceafarul",
+        title: "Luceafărul",
+        author: "Mihai Eminescu",
+        category: "poezie",
+        movement: "Romantism",
+        year: "1883",
+        genre: "liric",
+        species: "poem romantic / filozofic",
+        images: [
+            "assets/poezie/luceafarul/1.jpg",
+            "assets/poezie/luceafarul/2.jpg",
+            "assets/poezie/luceafarul/3.jpg",
+            "assets/poezie/luceafarul/4.jpg",
+            "assets/poezie/luceafarul/5.jpg",
+            "assets/poezie/luceafarul/6.jpg",
+        ],
+        mindmap: null,
+        source: "https://web.facebook.com/noualimba/posts/pfbid0kSyLjLVK8LEpvpfAoe5cypFDVi7arcwP9uXh5auYfFFNymVP4owUE2Y8FCrFpfUfl",
+        remember: "romantism + geniu + iubire imposibilă + alegorie",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "poezie-plumb",
+        title: "Plumb",
+        author: "George Bacovia",
+        category: "poezie",
+        movement: "Simbolism",
+        year: "1916",
+        genre: "liric",
+        species: "artă poetică / elegie simbolistă",
+        images: [
+            "assets/poezie/plumb/1.jpg",
+            "assets/poezie/plumb/2.jpg",
+            "assets/poezie/plumb/3.jpg",
+        ],
+        mindmap: "harti/plumb.jpg",
+        source: "https://web.facebook.com/story.php?story_fbid=1545274700294396&id=100044356422713",
+        remember: "simbolism + plumb + cavou + angoasă",
+        conclusion:
+            "Poezia concentrează universul bacovian: claustrare, moarte, tristețe, angoasă și imposibilitatea salvării.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Poezie simbolistă",
+                    "Deschide volumul „Plumb”",
+                    "Debut editorial în 1916",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Simbolism",
+                    "Simbol, sugestie, sinestezie, muzicalitate, cromatică, corespondențe",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Condiția poetului într-o societate artificială",
+                    "Iubirea și moartea",
+                ],
+            },
+            {
+                title: "Motive",
+                points: [
+                    "Plumbul, sicriul, cavoul, coroanele, florile, somnul, vântul, frigul, singurătatea",
+                ],
+            },
+            {
+                title: "Simbolul plumb",
+                points: [
+                    "Apăsare, angoasă, greutate sufocantă, imposibilitatea înălțării spirituale",
+                ],
+            },
+            {
+                title: "Imaginea 1",
+                points: [
+                    "Strofa I prezintă lumea exterioară ca un cavou, spațiu închis și apăsător.",
+                ],
+            },
+            {
+                title: "Imaginea 2",
+                points: [
+                    "Strofa a II-a prezintă iubirea moartă și accentuează singurătatea eului liric.",
+                ],
+            },
+            {
+                title: "Compoziție",
+                points: [
+                    "Două catrene simetrice",
+                    "Repetiția cuvântului „plumb” creează muzicalitate obsesivă.",
+                ],
+            },
+        ],
+    },
+    {
+        id: "poezie-eu-nu-strivesc-corola-de-minuni-a-lumii",
+        title: "Eu nu strivesc corola de minuni a lumii",
+        author: "Lucian Blaga",
+        category: "poezie",
+        movement: "Modernism / expresionism",
+        year: "1919",
+        genre: "liric",
+        species: "artă poetică modernă",
+        images: [
+            "assets/poezie/eu-nu-strivesc-corola-de-minuni-a-lumii/1.jpg",
+            "assets/poezie/eu-nu-strivesc-corola-de-minuni-a-lumii/2.jpg",
+            "assets/poezie/eu-nu-strivesc-corola-de-minuni-a-lumii/3.jpg",
+            "assets/poezie/eu-nu-strivesc-corola-de-minuni-a-lumii/4.jpg",
+            "assets/poezie/eu-nu-strivesc-corola-de-minuni-a-lumii/5.jpg",
+        ],
+        mindmap: "harti/eu-nu-strivesc.jpg",
+        source: "https://web.facebook.com/story.php?story_fbid=1559810872174112&id=100044356422713",
+        remember: "artă poetică + mister + lumină + cunoaștere luciferică",
+        conclusion:
+            "Rolul poetului nu este să explice lumea, ci să-i sporească taina prin iubire și creație.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Artă poetică modernă",
+                    "Deschide volumul „Poemele luminii”",
+                    "Publicată în 1919",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Modernism",
+                    "Discurs filosofic",
+                    "Intelectualizarea lirismului",
+                    "Metaforă revelatorie",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Atitudinea poetului în fața misterelor universului",
+                    "Cunoașterea prin iubire și creație",
+                ],
+            },
+            {
+                title: "Idei-cheie",
+                points: [
+                    "Misterul nu trebuie distrus, ci sporit",
+                    "Poetul alege cunoașterea luciferică",
+                ],
+            },
+            {
+                title: "Cunoaștere",
+                points: [
+                    "Paradisiacă = rațională, reduce misterul",
+                    "Luciferică = poetică, adâncește misterul",
+                ],
+            },
+            {
+                title: "Imaginea 1",
+                points: [
+                    "Refuzul de a „strivi” corola",
+                    "Florile, ochii, buzele și mormintele sunt forme ale tainei",
+                ],
+            },
+            {
+                title: "Titlul",
+                points: [
+                    "Forma negativă exprimă protejarea misterului",
+                    "„Corola” sugerează frumusețea totală a lumii",
+                ],
+            },
+            {
+                title: "Imaginea 2",
+                points: [
+                    "Lumina poetului nu lămurește misterul, ci îl amplifică asemenea luminii lunii",
+                ],
+            },
+        ],
+    },
+    {
+        id: "poezie-testament",
+        title: "Testament",
+        author: "Tudor Arghezi",
+        category: "poezie",
+        movement: "Modernism",
+        year: "1927",
+        genre: "liric",
+        species: "artă poetică modernă",
+        images: [
+            "assets/poezie/testament/1.jpg",
+            "assets/poezie/testament/2.jpg",
+            "assets/poezie/testament/3.jpg",
+            "assets/poezie/testament/4.jpg",
+            "assets/poezie/testament/5.jpg",
+        ],
+        mindmap: "harti/testament.jpg",
+        source: "https://web.facebook.com/story.php?story_fbid=1547700850051781&id=100044356422713",
+        remember: "artă poetică + estetica urâtului + cartea + moștenire",
+        conclusion:
+            "Poetul modern transformă suferința colectivă și urâtul existenței în artă durabilă.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Artă poetică modernă",
+                    "Deschide volumul „Cuvinte potrivite”",
+                    "1927",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Modernism",
+                    "Program literar",
+                    "Condiția operei",
+                    "Estetica urâtului",
+                    "Limbaj șocant",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Creația literară ca moștenire spirituală lăsată urmașilor",
+                ],
+            },
+            {
+                title: "Motive",
+                points: [
+                    "Cartea",
+                    "Poetul-făurar",
+                    "Revolta",
+                    "Metamorfoza",
+                    "Strămoșii",
+                    "Munca",
+                    "Suferința",
+                ],
+            },
+            {
+                title: "Estetica urâtului",
+                points: [
+                    "Poetul transformă „bube, mucegaiuri și noroi” în frumuseți artistice",
+                ],
+            },
+            {
+                title: "Ideea 1",
+                points: [
+                    "Lumea materială devine lume spirituală — „sapa-n condei” și „brazda-n călimară”",
+                ],
+            },
+            {
+                title: "Limbaj",
+                points: [
+                    "Arhaisme, regionalisme, termeni religioși și neologisme",
+                    "Vocabularul periferic devine material poetic",
+                ],
+            },
+            {
+                title: "Ideea 2",
+                points: [
+                    "Limbajul dur al strămoșilor devine poezie; creația se naște din muncă, suferință și trudă",
+                ],
+            },
+        ],
+    },
+    {
+        id: "poezie-flori-de-mucigai",
+        title: "Flori de mucigai",
+        author: "Tudor Arghezi",
+        category: "poezie",
+        movement: "Modernism",
+        year: "1931",
+        genre: "liric",
+        species: "artă poetică / estetica urâtului",
+        images: [
+            "assets/poezie/flori-de-mucigai/1.jpg",
+            "assets/poezie/flori-de-mucigai/2.jpg",
+            "assets/poezie/flori-de-mucigai/3.jpg",
+            "assets/poezie/flori-de-mucigai/4.jpg",
+        ],
+        mindmap: null,
+        source: "https://web.facebook.com/story.php?story_fbid=1558770085611524&id=100044356422713",
+        remember: "estetica urâtului + închisoare + creație din suferință",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "poezie-riga-crypto-si-lapona-enigel",
+        title: "Riga Crypto și lapona Enigel",
+        author: "Ion Barbu",
+        category: "poezie",
+        movement: "Modernism / ermetism",
+        year: "1924 / 1930",
+        genre: "liric",
+        species: "baladă cultă / poem alegoric",
+        images: [
+            "assets/poezie/riga-crypto-si-lapona-enigel/1.jpg",
+            "assets/poezie/riga-crypto-si-lapona-enigel/2.jpg",
+            "assets/poezie/riga-crypto-si-lapona-enigel/3.jpg",
+            "assets/poezie/riga-crypto-si-lapona-enigel/4.jpg",
+            "assets/poezie/riga-crypto-si-lapona-enigel/5.jpg",
+        ],
+        mindmap: "harti/riga-crypto.jpg",
+        source: "https://web.facebook.com/story.php?story_fbid=1557578932397306&id=100044356422713",
+        remember: "modernism + alegorie + iubire imposibilă + cunoaștere",
+        conclusion:
+            "Poemul prezintă drama incompatibilității dintre două lumi și valorifică modern tema cunoașterii prin alegorie și simbol.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Poem modernist",
+                    "Etapa baladic-orientală",
+                    "Publicat în 1924, inclus în „Joc secund” în 1930",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Baladă cultă modernistă",
+                    "Poem alegoric",
+                    "Limbaj ambiguu, încifrant, ermetic",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Iubirea imposibilă dintre ființe din lumi diferite, dublată de tema cunoașterii",
+                ],
+            },
+            {
+                title: "Personaje",
+                points: [
+                    "Crypto = ființă vegetală, inferioară, închisă în umbră",
+                    "Enigel = ființă umană care aspiră spre soare și cunoaștere",
+                ],
+            },
+            {
+                title: "Modernism",
+                points: [
+                    "Intelectualizarea discursului liric",
+                    "Simboluri: nunta, visul, cercul, roata, inelul, oglinda",
+                ],
+            },
+            {
+                title: "Secvența 1",
+                points: [
+                    "Mediile antitetice arată incompatibilitatea dintre lumea umedă și rece și aspirația spre lumină",
+                ],
+            },
+            {
+                title: "Secvența 2",
+                points: [
+                    "Refuzul lui Enigel arată superioritatea aspirației spre cunoaștere în fața stagnării vegetale",
+                ],
+            },
+            {
+                title: "Compoziție",
+                points: [
+                    "Povestire în ramă",
+                    "Două nunți — una umană, împlinită, și una alegorică, imposibilă",
+                ],
+            },
+        ],
+    },
+    {
+        id: "poezie-aci-sosi-pe-vremuri",
+        title: "Aci sosi pe vremuri",
+        author: "Ion Pillat",
+        category: "poezie",
+        movement: "Tradiționalism",
+        year: "1923",
+        genre: "liric",
+        species: "meditație elegiacă",
+        images: ["assets/poezie/aci-sosi-pe-vremuri/1.jpg"],
+        mindmap: null,
+        source: "https://poetii-nostri.ro/ion-pillat-aci-sosi-pe-vremuri-poezie-id-9660/",
+        remember: "tradiționalism + timp + memorie + spațiu natal",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "poezie-leoaica-tanara-iubirea",
+        title: "Leoaică tânără, iubirea",
+        author: "Nichita Stănescu",
+        category: "poezie",
+        movement: "Neomodernism",
+        year: "1964",
+        genre: "liric",
+        species: "poezie neomodernistă",
+        images: [
+            "assets/poezie/leoaica-tanara-iubirea/1.jpg",
+            "assets/poezie/leoaica-tanara-iubirea/2.jpg",
+            "assets/poezie/leoaica-tanara-iubirea/3.jpg",
+        ],
+        mindmap: null,
+        source: "https://web.facebook.com/story.php?story_fbid=1541217174033482&id=100044356422713",
+        remember: "neomodernism + iubire + metaforă + viziune",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "proza-harap-alb",
+        title: "Povestea lui Harap-Alb",
+        author: "Ion Creangă",
+        category: "proza",
+        movement: "Realism fantastic",
+        year: "1877",
+        genre: "epic",
+        species: "basm cult",
+        images: [],
+        mindmap: "harti/harap-alb.jpg",
+        source: null,
+        remember:
+            "basm cult + realism fantastic + bine vs rău + maturizarea eroului",
+        conclusion:
+            "Capodoperă a lui Creangă: îmbină fabulosul cu realismul și umorul și urmărește formarea eroului prin probe.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Basm cult",
+                    "Publicat în revista „Convorbiri literare”",
+                    "Apare în 1877",
+                    "Aparține Epocii Marilor Clasici",
+                    "Valorifică modelul popular în manieră cultă",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Basm cult tratat realist",
+                    "Încadrat de G. Călinescu în „realismul fantastic”",
+                    "Fantasticul este umanizat",
+                    "Amestec de real și fabulos",
+                ],
+            },
+            {
+                title: "Trăsături",
+                points: [
+                    "Personaje individualizate realist",
+                    "Protagonist fără puteri supranaturale",
+                    "Harap-Alb = tânăr aflat în formare",
+                    "Spânul = răufăcător, dar și „rău necesar”",
+                    "Limbaj și comportament inspirate din lumea țărănească",
+                ],
+            },
+            {
+                title: "Teme",
+                points: [
+                    "Confruntarea dintre bine și rău",
+                    "Maturizarea eroului",
+                    "Devenirea celui vrednic să devină împărat",
+                ],
+            },
+            {
+                title: "Perspectivă narativă",
+                points: [
+                    "Narațiune la persoana a III-a",
+                    "Narator omniscient",
+                    "Perspectivă obiectivă, nu total neutră",
+                    "Apar intervenții subiective și adresări directe către cititor",
+                ],
+            },
+            {
+                title: "Secvența fântânii",
+                points: [
+                    "Moment esențial al inițierii",
+                    "Fiul de crai este înșelat de Spân și își pierde identitatea",
+                    "Primește numele Harap-Alb",
+                    "Simbolic: moare și renaște",
+                    "Din fiu de crai devine sluga Spânului",
+                ],
+            },
+            {
+                title: "Finalul",
+                points: [
+                    "Fata Împăratului Roș dezvăluie adevărul",
+                    "Spânul este demascat și pedepsit",
+                    "Harap-Alb este ucis și apoi readus la viață",
+                    "Se restabilește echilibrul",
+                    "Nunta confirmă maturizarea eroului",
+                ],
+            },
+            {
+                title: "Titlu și acțiune",
+                points: [
+                    "Titlul indică specia și numele eroului",
+                    "Numele sugerează dubla identitate: prinț și slugă",
+                    "Are valoare de oximoron",
+                    "Probe: salățile din Grădina Ursului, pielea cerbului, aducerea fetei Împăratului Roș",
+                ],
+            },
+        ],
+    },
+    {
+        id: "proza-moara-cu-noroc",
+        title: "Moara cu noroc",
+        author: "Ioan Slavici",
+        category: "proza",
+        movement: "Realism psihologic",
+        year: "1881",
+        genre: "epic",
+        species: "nuvelă psihologică",
+        images: [
+            "assets/proza/moara-cu-noroc/1.jpg",
+            "assets/proza/moara-cu-noroc/2.jpg",
+            "assets/proza/moara-cu-noroc/3.jpg",
+            "assets/proza/moara-cu-noroc/4.jpg",
+            "assets/proza/moara-cu-noroc/5.jpg",
+            "assets/proza/moara-cu-noroc/6.jpg",
+        ],
+        mindmap: "harti/moara-cu-noroc.jpg",
+        source: "https://web.facebook.com/story.php?story_fbid=1563024238519442&id=100044356422713",
+        remember: "realism + analiză psihologică + lăcomie + dezumanizare",
+        conclusion:
+            "Omul care se îndepărtează de echilibru, familie și cinste ajunge la degradare și autodistrugere.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Nuvelă realistă, de factură psihologică",
+                    "Publicată în 1881",
+                    "Epoca Marilor Clasici",
+                    "Satul transilvănean",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Nuvelă realistă psihologică",
+                    "Perspectivă obiectivă",
+                    "Detaliu semnificativ",
+                    "Personaje tipice",
+                    "Analiză psihologică",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Dezumanizarea produsă de dorința de îmbogățire",
+                    "Conflictul dintre cinste, familie și patima banului",
+                ],
+            },
+            {
+                title: "Personaje",
+                points: [
+                    "Ghiță = cârciumarul dornic de îmbogățire",
+                    "Lică = sămădăul, răul corupător",
+                    "Ana = victima degradării morale",
+                ],
+            },
+            {
+                title: "Perspectivă",
+                points: [
+                    "Persoana a III-a",
+                    "Narator omniscient și omniprezent",
+                    "Focalizare externă și internă",
+                    "Stil indirect liber",
+                ],
+            },
+            {
+                title: "Secvența 1",
+                points: [
+                    "Apariția lui Lică la Moara cu noroc declanșează conflictul interior al lui Ghiță și tulbură echilibrul familiei",
+                ],
+            },
+            {
+                title: "Secvența 2",
+                points: [
+                    "Uciderea Anei marchează decăderea totală a lui Ghiță",
+                    "Finalul confirmă consecințele tragice ale lăcomiei",
+                ],
+            },
+            {
+                title: "Titlul",
+                points: [
+                    "Moara promite noroc, dar devine spațiul încercării morale și al pierzaniei",
+                ],
+            },
+        ],
+    },
+    {
+        id: "proza-ion",
+        title: "Ion",
+        author: "Liviu Rebreanu",
+        category: "proza",
+        movement: "Realism obiectiv",
+        year: "1920",
+        genre: "epic",
+        species: "roman realist-obiectiv",
+        images: [
+            "assets/proza/ion/1.jpg",
+            "assets/proza/ion/2.jpg",
+            "assets/proza/ion/3.jpg",
+            "assets/proza/ion/4.jpg",
+            "assets/proza/ion/5.jpg",
+        ],
+        mindmap: "harti/ion.jpg",
+        source: "https://web.facebook.com/story.php?story_fbid=1545833780238488&id=100044356422713",
+        remember: "realism obiectiv + pământ + patimă + destin tragic",
+        conclusion:
+            "Dorința de pământ îi oferă eroului statut, dar îi distruge echilibrul moral.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Roman interbelic realist",
+                    "Primul roman românesc modern important",
+                    "Sincronizează proza românească cu cea europeană",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Roman realist obiectiv",
+                    "Tematică socială",
+                    "Narator obiectiv",
+                    "Stil sobru",
+                    "Personaje tipice",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Problematica pământului",
+                    "Lupta țăranului sărac pentru avere și demnitate",
+                    "Iubirea și destinul",
+                ],
+            },
+            {
+                title: "Personaje",
+                points: [
+                    "Ion = țăranul sărac dominat de patima pământului",
+                    "Ana = fata bogată, fără noroc",
+                    "Florica = iubirea fără avere",
+                ],
+            },
+            {
+                title: "Perspectivă",
+                points: [
+                    "Narator detașat, omniscient și omniprezent",
+                    "Focalizare zero",
+                    "Viziune „dindărăt”",
+                ],
+            },
+            {
+                title: "Secvența 1",
+                points: [
+                    "Hora din incipit prezintă ierarhia satului, conflictele sociale și alegerea interesată a lui Ion pentru Ana",
+                ],
+            },
+            {
+                title: "Secvența 2",
+                points: [
+                    "Scena sărutării pământului arată obsesia eroului",
+                    "Pământul devine sursă de putere și identitate",
+                ],
+            },
+            {
+                title: "Structură",
+                points: [
+                    "Două părți simbolice — „Glasul pământului” și „Glasul iubirii”",
+                    "Destin circular și tragic",
+                ],
+            },
+        ],
+    },
+    {
+        id: "proza-baltagul",
+        title: "Baltagul",
+        author: "Mihail Sadoveanu",
+        category: "proza",
+        movement: "Realism tradiționalist",
+        year: "1930",
+        genre: "epic",
+        species: "roman tradiționalist, realist-mitic",
+        images: [
+            "assets/proza/baltagul/1.jpg",
+            "assets/proza/baltagul/2.jpg",
+            "assets/proza/baltagul/3.jpg",
+            "assets/proza/baltagul/4.jpg",
+            "assets/proza/baltagul/5.jpg",
+            "assets/proza/baltagul/6.jpg",
+            "assets/proza/baltagul/7.jpg",
+            "assets/proza/baltagul/8.jpg",
+        ],
+        mindmap: "harti/baltagul.jpg",
+        source: "https://web.facebook.com/story.php?story_fbid=1564322938389572&id=100044356422713",
+        remember: "realism + tradiționalism + drum inițiatic + adevăr",
+        conclusion:
+            "Romanul arată forța lumii tradiționale, în care adevărul, datoria și rânduiala morală trebuie restabilite.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Roman interbelic realist-tradiționalist",
+                    "Publicat în 1930",
+                    "Sinteză a prozei sadoveniene",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Roman realist",
+                    "Veridicitate",
+                    "Detaliu semnificativ",
+                    "Personaj în relație cu mediul",
+                    "Realism liric",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Călătoria pentru descoperirea adevărului",
+                    "Viața pastorală",
+                    "Familia",
+                    "Iubirea",
+                    "Natura",
+                ],
+            },
+            {
+                title: "Personaje",
+                points: [
+                    "Vitoria Lipan = femeie puternică, lucidă, morală",
+                    "Gheorghiță = tânărul care parcurge un drum inițiatic",
+                ],
+            },
+            {
+                title: "Perspectivă",
+                points: [
+                    "Narator obiectiv, omniscient",
+                    "Focalizare internă asupra Vitoriei",
+                    "Stil indirect liber",
+                ],
+            },
+            {
+                title: "Secvența 1",
+                points: [
+                    "Găsirea osemintelor lui Nechifor în râpă",
+                    "Gheorghiță trece prin experiența inițiatică a confruntării cu moartea",
+                ],
+            },
+            {
+                title: "Secvența 2",
+                points: [
+                    "Demascarea ucigașilor la praznic restabilește adevărul și ordinea morală a lumii tradiționale",
+                ],
+            },
+            {
+                title: "Simboluri",
+                points: [
+                    "Baltagul = dreptate și pedeapsă",
+                    "Drumul = inițiere",
+                    "Muntele = univers arhaic",
+                ],
+            },
+        ],
+    },
+    {
+        id: "proza-ultima-noapte",
+        title: "Ultima noapte de dragoste, întâia noapte de război",
+        author: "Camil Petrescu",
+        category: "proza",
+        movement: "Modernism",
+        year: "1930",
+        genre: "epic",
+        species: "roman modern, psihologic, al experienței",
+        images: [
+            "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/1.jpg",
+            "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/2.jpg",
+            "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/3.jpg",
+            "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/4.jpg",
+            "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/5.jpg",
+            "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/6.jpg",
+            "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/7.jpg",
+            "assets/proza/ultima-noapte-de-dragoste-intaia-noapte-de-razboi/8.jpg",
+        ],
+        mindmap: "harti/ultima-noapte.jpg",
+        source: "https://web.facebook.com/story.php?story_fbid=1546162250205641&id=100044356422713",
+        remember: "modernism + autenticitate + persoana I + luciditate",
+        conclusion:
+            "Romanul mută accentul de pe eveniment pe conștiință: drama lucidității și imposibilitatea atingerii absolutului în iubire.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Roman interbelic modern",
+                    "Roman al experienței",
+                    "Roman de analiză psihologică",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Modernism lovinescian",
+                    "Autenticitate",
+                    "Substanțialitate",
+                    "Relativism",
+                    "Luciditate",
+                    "Anticalofilism",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Dragostea și războiul ca experiențe fundamentale",
+                    "Gelozia, orgoliul rănit, mândria umilită",
+                ],
+            },
+            {
+                title: "Personaj",
+                points: [
+                    "Ștefan Gheorghidiu = intelectual lucid, analitic, hipersensibil, însetat de absolut",
+                ],
+            },
+            {
+                title: "Perspectivă",
+                points: [
+                    "Subiectivă",
+                    "Persoana I",
+                    "Narator-personaj",
+                    "Memorie involuntară",
+                    "Experiență interioară",
+                ],
+            },
+            {
+                title: "Secvența 1",
+                points: [
+                    "Discuția de la popota ofițerilor despre iubire și adulter declanșează rememorarea crizei conjugale",
+                ],
+            },
+            {
+                title: "Secvența 2",
+                points: [
+                    "Excursia de la Odobești amplifică gelozia lui Gheorghidiu și pune sub semnul întrebării fidelitatea Elei",
+                ],
+            },
+            {
+                title: "Titlul",
+                points: [
+                    "Cele două „nopți” marchează două experiențe-limită — iubirea și războiul",
+                ],
+            },
+        ],
+    },
+    {
+        id: "proza-enigma-otiliei",
+        title: "Enigma Otiliei",
+        author: "George Călinescu",
+        category: "proza",
+        movement: "Realism balzacian",
+        year: "1938",
+        genre: "epic",
+        species: "roman realist-balzacian",
+        images: [
+            "assets/proza/enigma-otiliei/1.jpg",
+            "assets/proza/enigma-otiliei/2.jpg",
+            "assets/proza/enigma-otiliei/3.jpg",
+            "assets/proza/enigma-otiliei/4.jpg",
+            "assets/proza/enigma-otiliei/5.jpg",
+            "assets/proza/enigma-otiliei/6.jpg",
+            "assets/proza/enigma-otiliei/7.jpg",
+            "assets/proza/enigma-otiliei/8.jpg",
+            "assets/proza/enigma-otiliei/9.jpg",
+            "assets/proza/enigma-otiliei/10.jpg",
+            "assets/proza/enigma-otiliei/11.jpg",
+        ],
+        mindmap: "harti/enigma-otiliei.jpg",
+        source: "https://web.facebook.com/noualimba/posts/pfbid0vC2Pvhr8g2e93EM2kNAXqmf4QY3smcHiADdiikzhvuZ4wxKBpY9Kcfu3K268v9UTl",
+        remember: "balzacianism + moștenire + familie + enigma Otiliei",
+        conclusion:
+            "Romanul îmbină modelul realist-balzacian cu tehnici moderne, construind o frescă a burgheziei și un personaj feminin enigmatic.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Roman interbelic",
+                    "Realist de tip balzacian, cu elemente moderne",
+                    "Publicat în 1938",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Roman realist balzacian",
+                    "Motivul moștenirii",
+                    "Tema familiei",
+                    "Personaje tipice",
+                    "Structură închisă",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Istoria moștenirii lui Costache Giurgiuveanu",
+                    "Formarea lui Felix",
+                    "Iubirea adolescentină și iubirea matură",
+                ],
+            },
+            {
+                title: "Personaje",
+                points: [
+                    "Otilia = personaj enigmatic",
+                    "Felix = tânărul în formare",
+                    "Costache = avarul",
+                    "Clanul Tulea = interesul pentru avere",
+                ],
+            },
+            {
+                title: "Perspectivă",
+                points: [
+                    "Narator obiectiv, omniscient",
+                    "Completat de perspectiva personajului-martor Felix",
+                ],
+            },
+            {
+                title: "Secvența 1",
+                points: [
+                    "Venirea lui Felix în casa lui Costache introduce mediul burghez și personajele prin detalii balzaciene",
+                ],
+            },
+            {
+                title: "Secvența 2",
+                points: [
+                    "Jocul de table și conflictele pentru avere evidențiază avariția și degradarea relațiilor de familie",
+                ],
+            },
+            {
+                title: "Tehnici",
+                points: [
+                    "Comportamentism și reflectare poliedrică",
+                    "Otilia este văzută diferit de fiecare personaj",
+                ],
+            },
+        ],
+    },
+    {
+        id: "proza-morometii",
+        title: "Moromeții",
+        author: "Marin Preda",
+        category: "proza",
+        movement: "Realism postbelic",
+        year: "1955 / 1967",
+        genre: "epic",
+        species: "roman realist postbelic",
+        images: [
+            "assets/proza/morometii/1.jpg",
+            "assets/proza/morometii/2.jpg",
+            "assets/proza/morometii/3.jpg",
+            "assets/proza/morometii/4.jpg",
+            "assets/proza/morometii/5.jpg",
+            "assets/proza/morometii/6.jpg",
+            "assets/proza/morometii/7.jpg",
+            "assets/proza/morometii/8.jpg",
+            "assets/proza/morometii/9.jpg",
+            "assets/proza/morometii/10.jpg",
+            "assets/proza/morometii/11.jpg",
+            "assets/proza/morometii/12.jpg",
+            "assets/proza/morometii/13.jpg",
+            "assets/proza/morometii/14.jpg",
+            "assets/proza/morometii/15.jpg",
+            "assets/proza/morometii/16.jpg",
+        ],
+        mindmap: null,
+        source: "https://web.facebook.com/story.php?story_fbid=1550451129776753&id=100044356422713",
+        remember: "neorealism + țărănime + timp + destrămarea familiei",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "teatru-o-scrisoare-pierduta",
+        title: "O scrisoare pierdută",
+        author: "I. L. Caragiale",
+        category: "teatru",
+        movement: "Realism clasic",
+        year: "1884",
+        genre: "dramatic",
+        species: "comedie de moravuri",
+        images: [
+            "assets/teatru/o-scrisoare-pierduta/1.jpg",
+            "assets/teatru/o-scrisoare-pierduta/2.jpg",
+            "assets/teatru/o-scrisoare-pierduta/3.jpg",
+            "assets/teatru/o-scrisoare-pierduta/4.jpg",
+            "assets/teatru/o-scrisoare-pierduta/5.jpg",
+            "assets/teatru/o-scrisoare-pierduta/6.jpg",
+            "assets/teatru/o-scrisoare-pierduta/7.jpg",
+            "assets/teatru/o-scrisoare-pierduta/8.jpg",
+        ],
+        mindmap: "harti/scrisoare-pierduta.jpg",
+        source: "https://web.facebook.com/noualimba/posts/pfbid034gEWkuYDQFBAow6M7kCQyZA7rB6XzhN4xTMg3mHku6c8TqGPZ3vWzg7GijVC7sV5l",
+        remember: "comedie realistă + satiră politică + șantaj + comic",
+        conclusion:
+            "Lupta pentru putere se amestecă ridicol cu interesul personal: o satiră lucidă a societății.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Comedie realistă de moravuri sociale și politice",
+                    "Reprezentată în 1884",
+                    "Publicată în 1885 în „Convorbiri literare”",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Comedie realistă",
+                    "Satirizează corupția politică, demagogia și viața de familie degradată",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Degradarea vieții politice, sociale și familiale în timpul campaniei electorale",
+                ],
+            },
+            {
+                title: "Personaje",
+                points: [
+                    "Tipătescu = amorezul / orgoliosul",
+                    "Zoe = femeia voluntară",
+                    "Trahanache = încornoratul abil",
+                    "Cațavencu = demagogul",
+                ],
+            },
+            {
+                title: "Spațiu / timp",
+                points: [
+                    "„Capitala unui județ de munte”",
+                    "Campanie electorală",
+                    "Final de secol XIX",
+                    "Generalizare",
+                ],
+            },
+            {
+                title: "Secvența 1",
+                points: [
+                    "Trahanache îl anunță pe Tipătescu despre scrisoarea de amor ajunsă la Cațavencu",
+                    "Începe șantajul politic",
+                ],
+            },
+            {
+                title: "Secvența 2",
+                points: [
+                    "Cațavencu folosește scrisoarea pentru a cere candidatura",
+                    "Comicul scoate la iveală corupția și ipocrizia",
+                ],
+            },
+            {
+                title: "Comicul",
+                points: [
+                    "Comic de situație",
+                    "Comic de caracter",
+                    "Comic de limbaj",
+                    "Comic de nume",
+                    "Comic de moravuri",
+                ],
+            },
+        ],
+    },
+    {
+        id: "teatru-iona",
+        title: "Iona",
+        author: "Marin Sorescu",
+        category: "teatru",
+        movement: "Neomodernism",
+        year: "1968",
+        genre: "dramatic",
+        species: "dramă / tragedie parabolică",
+        images: [
+            "assets/teatru/iona/1.jpg",
+            "assets/teatru/iona/2.jpg",
+            "assets/teatru/iona/3.jpg",
+            "assets/teatru/iona/4.jpg",
+            "assets/teatru/iona/5.jpg",
+            "assets/teatru/iona/6.jpg",
+            "assets/teatru/iona/7.jpg",
+        ],
+        mindmap: "harti/iona.jpg",
+        source: "https://web.facebook.com/story.php?story_fbid=1569177564570776&id=100044356422713",
+        remember: "neomodernism + parabolă + singurătate + căutarea sinelui",
+        conclusion:
+            "Piesa reflectă drama omului modern izolat, aflat într-o permanentă căutare a libertății și a propriei identități.",
+        blocks: [
+            {
+                title: "Încadrare",
+                points: [
+                    "Dramă neomodernistă",
+                    "Publicată în 1968",
+                    "„Tragedie în patru tablouri”",
+                    "Parte din trilogia „Setea muntelui de sare”",
+                ],
+            },
+            {
+                title: "Specie / curent",
+                points: [
+                    "Teatru neomodernist",
+                    "Depășește convențiile dramaturgiei clasice",
+                    "Dialog interiorizat",
+                    "Personaj unic",
+                ],
+            },
+            {
+                title: "Tema",
+                points: [
+                    "Singurătatea ființei umane",
+                    "Căutarea sinelui",
+                    "Revolta omului în fața destinului",
+                ],
+            },
+            {
+                title: "Mit / parabolă",
+                points: [
+                    "Reia mitul biblic al lui Iona",
+                    "Devine parabolă existențială",
+                    "Poate fi interpretată și politic",
+                ],
+            },
+            {
+                title: "Tabloul I",
+                points: [
+                    "Iona pescuiește în gura peștelui",
+                    "Acvariul sugerează captivitatea",
+                    "Omul trăiește într-un spațiu-limită",
+                ],
+            },
+            {
+                title: "Tablourile II–III",
+                points: [
+                    "Iona spintecă pereții peștelui pentru a evada",
+                    "Descoperă alte burți de pește: captivitatea continuă la nesfârșit",
+                ],
+            },
+            {
+                title: "Final",
+                points: [
+                    "Își caută ieșirea „înăuntru”",
+                    "Gestul final exprimă lupta disperată pentru libertate și sens",
+                ],
+            },
+            {
+                title: "Trăsături",
+                points: [
+                    "Ambiguitate",
+                    "Simboluri și limbaj metaforic",
+                    "Monolog dramatic",
+                    "Reflecție filosofică",
+                ],
+            },
+        ],
+    },
+    {
+        id: "curente-romantismul",
+        title: "Romantismul",
+        author: null,
+        category: "curente",
+        movement: "Curent literar",
+        year: null,
+        genre: null,
+        species: null,
+        images: ["assets/curente/romantismul/1.jpg"],
+        mindmap: null,
+        source: "https://web.facebook.com/story.php?story_fbid=1544138783741321&id=100044356422713",
+        remember: "antiteză + geniu + natură + evadare",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "curente-realismul",
+        title: "Realismul",
+        author: null,
+        category: "curente",
+        movement: "Curent literar",
+        year: null,
+        genre: null,
+        species: null,
+        images: ["assets/curente/realismul/1.jpg"],
+        mindmap: null,
+        source: "https://web.facebook.com/story.php?story_fbid=1546085776879955&id=100044356422713",
+        remember:
+            "veridicitate + tipic + detaliu semnificativ + critică socială",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "curente-simbolismul",
+        title: "Simbolismul",
+        author: null,
+        category: "curente",
+        movement: "Curent literar",
+        year: null,
+        genre: null,
+        species: null,
+        images: ["assets/curente/simbolismul/1.jpg"],
+        mindmap: null,
+        source: "https://web.facebook.com/story.php?story_fbid=1544128820408984&id=100044356422713",
+        remember: "simbol + sugestie + muzicalitate + corespondențe",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "curente-modernismul",
+        title: "Modernismul",
+        author: null,
+        category: "curente",
+        movement: "Curent literar",
+        year: null,
+        genre: null,
+        species: null,
+        images: [
+            "assets/curente/modernismul/1.jpg",
+            "assets/curente/modernismul/2.jpg",
+            "assets/curente/modernismul/3.jpg",
+        ],
+        mindmap: null,
+        source: "https://web.facebook.com/story.php?story_fbid=1544894630332403&id=100044356422713",
+        remember: "noutate + sincronizare + intelectualizare + anticalofilism",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "curente-neomodernismul",
+        title: "Neomodernismul",
+        author: null,
+        category: "curente",
+        movement: "Curent literar",
+        year: null,
+        genre: null,
+        species: null,
+        images: ["assets/curente/neomodernismul/1.jpg"],
+        mindmap: null,
+        source: "https://web.facebook.com/story.php?story_fbid=1554023562752843&id=100044356422713",
+        remember:
+            "metaforă + ambiguitate + rescriere a mitului + libertate a formei",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "repere-tipurile-de-text",
+        title: "Tipurile de text",
+        author: null,
+        category: "repere",
+        movement: "Fișă de reper",
+        year: null,
+        genre: null,
+        species: null,
+        images: ["assets/repere/tipurile-de-text/1.jpg"],
+        mindmap: null,
+        source: null,
+        remember: "narativ + descriptiv + dialogat + argumentativ",
+        conclusion: null,
+        blocks: [],
+    },
+    {
+        id: "repere-tabel-opere",
+        title: "Tabel opere BAC",
+        author: null,
+        category: "repere",
+        movement: "Cronologie · gen · specie · curent",
+        year: null,
+        genre: null,
+        species: null,
+        images: [],
+        mindmap: "harti/tabel-opere.jpg",
+        source: null,
+        remember: "an + autor + gen + specie + curent",
+        conclusion:
+            "Verificare rapidă: Harap-Alb = realism fantastic · Plumb = simbolism · Enigma Otiliei = realism balzacian.",
+        blocks: [
+            {
+                title: "Cum îl folosești",
+                points: [
+                    "Învață pentru fiecare operă cinci date: anul, autorul, genul, specia și curentul.",
+                    "Posterul e în fila Hartă. Mai jos, în programă, ai același tabel pe rânduri, lizibil pe telefon.",
+                    "Apasă o operă care are fișă ca să treci direct la ea.",
+                ],
+            },
+        ],
+    },
+    {
+        id: "repere-incadrare",
+        title: "Încadrarea operelor literare",
+        author: null,
+        category: "repere",
+        movement: "Subiectul al III-lea",
+        year: null,
+        genre: null,
+        species: null,
+        images: [
+            "harti/incadrare-1.jpg",
+            "harti/incadrare-2.jpg",
+            "harti/incadrare-3.jpg",
+            "harti/incadrare-4.jpg",
+        ],
+        mindmap: null,
+        source: null,
+        remember: "curent + specie + gen + titlu + autor",
+        conclusion:
+            "Tabel orientativ pentru Bacalaureat. Unele rânduri sunt doar pentru profilul umanist și pedagogic.",
+        blocks: [
+            {
+                title: "Cum citești tabelul",
+                points: [
+                    "Patru părți: pașoptism și Junimea, prelungiri și Lovinescu, interbelicul poetic, proza și postbelicul.",
+                    "Pe telefon, fiecare rând e o fișă. Posterile originale sunt în fila Pagini, dacă le vrei ca imagine.",
+                    "Operele care au comentariu în caiet se deschid din programă.",
+                ],
+            },
+        ],
+    },
+    {
+        id: "metode-perspectiva",
+        title: "Perspectiva narativă",
+        author: null,
+        category: "metode",
+        movement: "Subiectul II",
+        year: null,
+        genre: null,
+        species: "schemă de răspuns",
+        images: [],
+        mindmap: "harti/perspectiva-narativa.jpg",
+        source: null,
+        remember:
+            "numește tipul perspectivei + dovedește-l prin 2–3 exemple din text",
+        conclusion: null,
+        blocks: [
+            {
+                title: "Ce este?",
+                points: [
+                    "Perspectiva narativă reprezintă punctul de vedere din care sunt prezentate evenimentele într-un text narativ.",
+                ],
+            },
+            {
+                title: "Perspectivă obiectivă",
+                points: [
+                    "Narator omniscient și omniprezent",
+                    "Relatare la persoana a III-a",
+                    "Verbe și pronume la persoana a III-a",
+                    "Realitatea este prezentată detașat, ca printr-o „cameră de luat vederi”",
+                    "Naratorul nu își exprimă direct afectivitatea",
+                ],
+            },
+            {
+                title: "Perspectivă subiectivă",
+                points: [
+                    "Narator-personaj sau narator-martor",
+                    "Relatare la persoana I (și uneori a II-a în adresare directă)",
+                    "Apar mărcile afectivității și confesiunii",
+                    "Sunt prezente impresii, gânduri și percepții personale",
+                    "Viziune filtrată prin conștiința naratorului",
+                ],
+            },
+            {
+                title: "Schemă de răspuns",
+                points: [
+                    "Fragmentul dat, extras din opera „...” de ..., propune o perspectivă narativă de tip subiectivă/obiectivă.",
+                    "Subiectivitatea / obiectivitatea implică atât mărci lexico-gramaticale, cât și nota confesivă sau modul detașat de prezentare.",
+                    "Naratorul se folosește de personaje pentru relatarea evenimentelor.",
+                    "Se realizează prin pronumele și verbele persoanei I / a III-a și prin impresii personale sau prin prezentarea obiectivă a faptelor.",
+                ],
+            },
+            {
+                title: "Indicii pe text",
+                points: [
+                    "Pronume și verbe la persoana I / III",
+                    "Prezența sau absența afectivității",
+                    "Impresii personale / relatare neutră",
+                    "Tipul naratorului",
+                    "Felul în care este prezentată realitatea",
+                ],
+            },
+        ],
+    },
+    {
+        id: "metode-caracterizare",
+        title: "Modalități de caracterizare a personajelor",
+        author: null,
+        category: "metode",
+        movement: "Subiectul II",
+        year: null,
+        genre: null,
+        species: "schemă de răspuns",
+        images: [],
+        mindmap: "harti/caracterizare.jpg",
+        source: null,
+        remember:
+            "dă 2–3 exemple din text și precizează ce trăsătură dovedește fiecare",
+        conclusion: null,
+        blocks: [
+            {
+                title: "Ce urmărești?",
+                points: [
+                    "Trebuie să evidențiezi trăsăturile personajului și felul în care acestea reies din fragmentul dat.",
+                ],
+            },
+            {
+                title: "Caracterizare directă",
+                points: [
+                    "Realizată de autor",
+                    "Realizată de alte personaje",
+                    "Autocaracterizare",
+                    "Prin afirmații directe despre aspectul fizic sau moral",
+                ],
+            },
+            {
+                title: "Caracterizare indirectă",
+                points: [
+                    "Prin fapte și comportament",
+                    "Prin limbaj și felul de a vorbi",
+                    "Prin gesturi, atitudine, mimică",
+                    "Prin vestimentație și mediul în care trăiește",
+                    "Prin relațiile cu celelalte personaje",
+                ],
+            },
+            {
+                title: "Schemă de răspuns",
+                points: [
+                    "În fragmentul dat, extras din opera „...” scrisă de ..., naratorul prezintă un episod din viața personajului ..., aflat într-o anumită situație.",
+                    "Personajul este caracterizat direct prin afirmații ale autorului / ale altor personaje / prin autocaracterizare.",
+                    "Se observă și caracterizare indirectă, prin fapte, limbaj, gesturi, atitudine, vestimentație sau relații.",
+                    "Autorul realizează un personaj bine individualizat, ale cărui trăsături se conturează clar în fragment.",
+                ],
+            },
+            {
+                title: "Indicii pe text",
+                points: [
+                    "Adjective sau formulări directe despre personaj",
+                    "Acțiunile personajului",
+                    "Felul în care vorbește",
+                    "Relația cu alte personaje",
+                    "Comportamentul, gesturile și atitudinea",
+                ],
+            },
+        ],
+    },
+    {
+        id: "metode-didascalii",
+        title: "Didascalii",
+        author: null,
+        category: "metode",
+        movement: "Subiectul II",
+        year: null,
+        genre: null,
+        species: "schemă de răspuns",
+        images: [],
+        mindmap: "harti/didascalii.jpg",
+        source: null,
+        remember:
+            "numește didascaliile + arată ce spun ele despre scenă și personaje",
+        conclusion: null,
+        blocks: [
+            {
+                title: "Ce sunt?",
+                points: [
+                    "Indicațiile scenice, numite și didascalii, sunt instrucțiunile autorului unei piese de teatru, oferite pentru o interpretare corectă a operei pe scenă.",
+                ],
+            },
+            {
+                title: "Ce notează?",
+                points: [
+                    "Decorul și cadrul acțiunii",
+                    "Timpul și spațiul",
+                    "Gestica și mimica personajelor",
+                    "Postura și vestimentația",
+                    "Elemente paraverbale: tonul, oftatul, râsul, exclamațiile",
+                ],
+            },
+            {
+                title: "Rolul lor",
+                points: [
+                    "Ajută actorii și regizorul în punerea în scenă",
+                    "Clarifică felul în care trebuie rostite replicile",
+                    "Oferă detalii importante despre personaje",
+                    "Îl ajută și pe cititor să își imagineze mai bine scena",
+                ],
+            },
+            {
+                title: "Schemă de răspuns",
+                points: [
+                    "Fragmentul dat este extras din opera dramatică „...” scrisă de ... și prezintă un episod din viața personajelor, surprins într-un anumit context scenic.",
+                    "Didascaliile notează succint detalii privind decorul și cadrul acțiunii, precum și elemente nonverbale și paraverbale.",
+                    "Se observă indicații referitoare la gestică, mimică, postură, vestimentație sau intonație.",
+                    "Textul este semnificativ prin aceste indicații scenice, utile atât pentru jocul actorilor, cât și pentru lectură.",
+                ],
+            },
+            {
+                title: "Indicii pe text",
+                points: [
+                    "Cuvinte scrise între paranteze",
+                    "Verbe care indică mișcarea sau gestul",
+                    "Precizări despre decor",
+                    "Indicații despre tonul replicilor",
+                    "Informații despre mimică, postură sau vestimentație",
+                ],
+            },
+        ],
+    },
+    {
+        id: "metode-idee-poetica",
+        title: "Ideea poetică și mijloacele artistice",
+        author: null,
+        category: "metode",
+        movement: "Subiectul II",
+        year: null,
+        genre: null,
+        species: "schemă de răspuns",
+        images: [],
+        mindmap: "harti/idee-poetica.jpg",
+        source: null,
+        remember:
+            "nu enumera doar figurile de stil — explică și ce sugerează ele",
+        conclusion: null,
+        blocks: [
+            {
+                title: "Ce urmărești?",
+                points: [
+                    "Trebuie să arăți ce idee poetică transmite textul: tema, sentimentul dominant și viziunea eului liric.",
+                ],
+            },
+            {
+                title: "Mijloace artistice",
+                points: [
+                    "Figuri de stil: epitet, metaforă, comparație, personificare",
+                    "Imagini artistice: vizuale, auditive, dinamice",
+                    "Motive poetice și simboluri",
+                    "Repetiții, enumerații, inversiuni",
+                ],
+            },
+            {
+                title: "Ce demonstrezi?",
+                points: [
+                    "Cum susțin figurile de stil ideea poetică",
+                    "Ce sentiment transmite eul liric",
+                    "Cum contribuie imaginile artistice la expresivitate",
+                    "Cum se leagă motivele poetice de mesajul textului",
+                ],
+            },
+            {
+                title: "Schemă de răspuns",
+                points: [
+                    "Poezia „...” scrisă de ... abordează tema ..., fiind prezentat sentimentul de ... cu ajutorul motivelor poetice și al mijloacelor artistice.",
+                    "Viziunea eului liric este exprimată prin figuri de stil și imagini artistice.",
+                    "Se observă, de exemplu, ..., care sugerează ..., precum și ..., care conturează o atmosferă de ...",
+                    "Relația dintre ideea poetică și mijloacele artistice este esențială, deoarece limbajul susține direct mesajul poeziei.",
+                ],
+            },
+            {
+                title: "Indicii pe text",
+                points: [
+                    "Identifică tema și sentimentul dominant",
+                    "Caută figuri de stil și explică rolul lor",
+                    "Observă imaginile artistice",
+                    "Menționează motivele poetice importante",
+                    "Leagă totul de mesajul poeziei",
+                ],
+            },
+        ],
+    },
+    {
+        id: "metode-argumentativ",
+        title: "Textul argumentativ",
+        author: null,
+        category: "metode",
+        movement: "Subiectul I / structură",
+        year: null,
+        genre: null,
+        species: "schemă de răspuns",
+        images: [],
+        mindmap: "harti/text-argumentativ.jpg",
+        source: null,
+        remember: "ipoteză → argumente cu exemple → concluzie",
+        conclusion:
+            "Salvează postarea pentru BAC: structură, conectori, model scurt.",
+        blocks: [
+            {
+                title: "Structura",
+                points: [
+                    "Ipoteza — enunțarea unei opinii / a unei teze",
+                    "Argumentarea — susținerea ideii prin argumente și exemple",
+                    "Concluzia — reluarea ipotezei și formularea unei încheieri clare",
+                ],
+            },
+            {
+                title: "Conectori pentru ipoteză",
+                points: [
+                    "consider că",
+                    "părerea mea este că",
+                    "în opinia mea",
+                    "(nu) sunt de acord că",
+                    "(nu) este adevărat că",
+                ],
+            },
+            {
+                title: "Conectori pentru argumentare",
+                points: [
+                    "în primul rând",
+                    "în al doilea rând",
+                    "pe de o parte / pe de altă parte",
+                    "deoarece, pentru că, întrucât",
+                    "de exemplu, precum, la fel ca, spre deosebire de",
+                ],
+            },
+            {
+                title: "Conectori pentru concluzie",
+                points: ["în concluzie", "deci", "prin urmare", "așadar"],
+            },
+            {
+                title: "Model scurt",
+                points: [
+                    "În opinia mea...",
+                    "În primul rând...",
+                    "În al doilea rând...",
+                    "În concluzie...",
+                ],
+            },
+            {
+                title: "Ce face o argumentare bună?",
+                points: [
+                    "Logica argumentelor",
+                    "Adecvarea argumentelor la temă",
+                    "Claritatea și coerența exprimării",
+                    "Respectarea normelor de ortografie",
+                    "Respectarea regulilor de punctuație",
+                ],
+            },
+        ],
+    },
+];
+const SYLLABUS = [
+    {
+        era: "Literatura română în secolul al XIX-lea",
+        period: "1. Perioada pașoptistă",
+        orientation: "Începuturile romantismului (manifest literar)",
+        species: "—",
+        work: "Introducție la Dacia literară de Mihail Kogălniceanu (1840)",
+    },
+    {
+        era: "Literatura română în secolul al XIX-lea",
+        period: "1. Perioada pașoptistă",
+        orientation: "(Pre)romantism",
+        species: "Nuvelă istorică / genul epic",
+        work: "Alexandru Lăpușneanul de Costache Negruzzi (1840)",
+    },
+    {
+        era: "Literatura română în secolul al XIX-lea",
+        period: "2. Junimism / Epoca Marilor Clasici",
+        orientation: "Criticismul junimist",
+        species: "Articole / studii",
+        work: "Titu Maiorescu — În contra direcției de astăzi…; O cercetare critică…; Eminescu și poeziile lui; Comediile d-lui Caragiale",
+    },
+    {
+        era: "Literatura română în secolul al XIX-lea",
+        period: "2. Junimism / Epoca Marilor Clasici",
+        orientation: "Realismul „Marilor Clasici” (realism fantastic)",
+        species: "Basm cult / genul epic",
+        work: "Povestea lui Harap-Alb de Ion Creangă (1877)",
+        studyId: "proza-harap-alb",
+    },
+    {
+        era: "Literatura română în secolul al XIX-lea",
+        period: "2. Junimism / Epoca Marilor Clasici",
+        orientation: "Realism psihologic",
+        species: "Nuvelă psihologică / genul epic",
+        work: "Moara cu noroc de Ioan Slavici (1881)",
+        studyId: "proza-moara-cu-noroc",
+    },
+    {
+        era: "Literatura română în secolul al XIX-lea",
+        period: "2. Junimism / Epoca Marilor Clasici",
+        orientation: "Romantism",
+        species: "Poem filozofic, eglogă și elegie / genul liric",
+        work: "Floare albastră de Mihai Eminescu (1873)",
+        studyId: "poezie-floare-albastra",
+    },
+    {
+        era: "Literatura română în secolul al XIX-lea",
+        period: "2. Junimism / Epoca Marilor Clasici",
+        orientation: "Romantism",
+        species: "Poem romantic filozofic / genul liric",
+        work: "Luceafărul de Mihai Eminescu (1883)",
+        studyId: "poezie-luceafarul",
+    },
+    {
+        era: "Literatura română în secolul al XIX-lea",
+        period: "2. Junimism / Epoca Marilor Clasici",
+        orientation: "Realism clasic",
+        species: "Comedie de moravuri / genul dramatic",
+        work: "O scrisoare pierdută de I. L. Caragiale (1884)",
+        studyId: "teatru-o-scrisoare-pierduta",
+    },
+    {
+        era: "Sfârșitul secolului XIX și începutul secolului XX",
+        period: "3. Prelungiri ale romantismului și clasicismului",
+        footnote: "Doar pentru profilul umanist și pedagogic",
+        orientation: "Poezie fără încadrare strictă într-un curent",
+        species: "Elegie / genul liric",
+        work: "De demult… sau Rugăciune de Octavian Goga",
+    },
+    {
+        era: "Sfârșitul secolului XIX și începutul secolului XX",
+        period: "3. Prelungiri ale romantismului și clasicismului",
+        footnote: "Doar pentru profilul umanist și pedagogic",
+        orientation: "Poezie fără încadrare strictă într-un curent",
+        species: "Idilă sau pastorală",
+        work: "Mânioasă de George Coșbuc (1889)",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Modernism (doctrină)",
+        species: "—",
+        work: "Eugen Lovinescu — Sburătorul; Istoria civilizației române moderne; Istoria literaturii române contemporane",
+        studyId: "curente-modernismul",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Simbolism — începuturile modernismului",
+        species: "Elegie / genul liric",
+        work: "Plumb sau Lacustră de George Bacovia (1916)",
+        studyId: "poezie-plumb",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Modernism în poezie — expresionism",
+        species: "Artă poetică modernă / genul liric",
+        work: "Eu nu strivesc corola de minuni a lumii de Lucian Blaga (1919)",
+        studyId: "poezie-eu-nu-strivesc-corola-de-minuni-a-lumii",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Modernism în poezie — estetica urâtului",
+        species: "Artă poetică modernă / genul liric",
+        work: "Testament (1927) sau Flori de mucigai (1931) de Tudor Arghezi",
+        studyId: "poezie-testament",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Modernism în poezie — ermetism",
+        species: "Poem alegoric / genul liric",
+        work: "Riga Crypto și lapona Enigel de Ion Barbu (1924 / 1930)",
+        studyId: "poezie-riga-crypto-si-lapona-enigel",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Tradiționalism în poezie",
+        species: "Meditație / genul liric",
+        work: "Aci sosi pe vremuri de Ion Pillat (1923)",
+        studyId: "poezie-aci-sosi-pe-vremuri",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Tradiționalism în poezie",
+        species: "Poezie religioasă / genul liric",
+        work: "În grădina Ghetsemani de Vasile Voiculescu (1921)",
+        studyId: "poezie-in-gradina-ghetsemani",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Avangardism",
+        species: "Poezie lirică",
+        work: "Ora fântânilor de Ion Vinea (1938)",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Modernism în proză / realism psihologic",
+        species: "Roman al experienței / genul epic",
+        work: "Ultima noapte de dragoste, întâia noapte de război de Camil Petrescu (1930)",
+        studyId: "proza-ultima-noapte",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Modernism în proză",
+        species: "Roman exotic, subiectiv / genul epic",
+        work: "Maitreyi de Mircea Eliade (1933)",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Realism social",
+        species: "Roman realist obiectiv / genul epic",
+        work: "Ion de Liviu Rebreanu (1920)",
+        studyId: "proza-ion",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Realism balzacian",
+        species: "Roman realist-balzacian / genul epic",
+        work: "Enigma Otiliei de George Călinescu (1938)",
+        studyId: "proza-enigma-otiliei",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        orientation: "Realism tradiționalist",
+        species: "Roman realist-mitic / genul epic",
+        work: "Baltagul de Mihail Sadoveanu (1930)",
+        studyId: "proza-baltagul",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "4. Perioada interbelică",
+        footnote: "Dramaturgia, profil umanist și pedagogic",
+        orientation: "Dramaturgie interbelică",
+        species: "Dramă / genul dramatic",
+        work: "Jocul ielelor de Camil Petrescu (1919)",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "5. Perioada postbelică",
+        orientation: "Neorealism / realism postbelic",
+        species: "Roman postbelic obiectiv / genul epic",
+        work: "Moromeții de Marin Preda (1955 / 1967)",
+        studyId: "proza-morometii",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "5. Perioada postbelică",
+        orientation: "Neomodernism",
+        species: "Poezie neomodernistă / genul liric",
+        work: "Leoaică tânără, iubirea de Nichita Stănescu (1964)",
+        studyId: "poezie-leoaica-tanara-iubirea",
+    },
+    {
+        era: "Literatura română în secolul al XX-lea",
+        period: "5. Perioada postbelică",
+        orientation: "Neomodernism",
+        species: "Dramă parabolică / genul dramatic",
+        work: "Iona de Marin Sorescu (1968)",
+        studyId: "teatru-iona",
+    },
 ];

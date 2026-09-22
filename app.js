@@ -1,415 +1,766 @@
-// Renders study cards from STUDY_ITEMS (data.js), handles search,
-// category filtering, dark mode, and the focus-viewer modal.
+const PROGRESS_KEY = "caiet-bac-v1";
 
-(function () {
-    "use strict";
+const ui = {
+  query: "",
+  category: "all",
+  onlyMaps: false,
+  onlyReview: false,
+  view: "fise",
+  page: 0,
+  zoom: false,
+  scale: 1,
+  recapCat: "all",
+  recapCursor: 0,
+  recapShown: false,
+};
 
-    const CATEGORIES = [
-        { id: "all", label: "Toate" },
-        { id: "poezie", label: "Poezie" },
-        { id: "proza", label: "Proză" },
-        { id: "teatru", label: "Teatru" },
-        { id: "curente", label: "Curente literare" },
-        { id: "repere", label: "Repere" },
-    ];
-
-    const TAG_CLASS = {
-        poezie: "tag-poezie",
-        proza: "tag-proza",
-        teatru: "tag-teatru",
-        curente: "tag-curente",
-        repere: "tag-repere",
+function loadProgress() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(PROGRESS_KEY) || "{}");
+    return {
+      seen: Array.isArray(raw.seen) ? raw.seen : [],
+      review: Array.isArray(raw.review) ? raw.review : [],
+      known: Array.isArray(raw.known) ? raw.known : [],
     };
+  } catch {
+    return { seen: [], review: [], known: [] };
+  }
+}
 
-    const state = {
-        query: "",
-        category: "all",
-        filtered: STUDY_ITEMS.slice(),
-        modal: {
-            open: false,
-            workIndex: -1, // index into state.filtered
-            pageIndex: 0,
-            zoomed: false,
-        },
-    };
+let progress = loadProgress();
 
-    // ---------- DOM refs ----------
-    const $grid = document.getElementById("study-grid");
-    const $empty = document.getElementById("empty-state");
-    const $count = document.getElementById("results-count");
-    const $pills = document.getElementById("filter-pills");
-    const $search = document.getElementById("search-input");
-    const $themeToggle = document.getElementById("theme-toggle");
+function saveProgress() {
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+}
 
-    const $modalRoot = document.getElementById("modal-root");
-    const $modalBackdrop = document.getElementById("modal-backdrop");
-    const $modalClose = document.getElementById("modal-close");
-    const $modalTitle = document.getElementById("modal-title");
-    const $modalAuthor = document.getElementById("modal-author");
-    const $modalPageIndicator = document.getElementById("modal-page-indicator");
-    const $modalImg = document.getElementById("modal-img");
-    const $modalImgWrap = document.getElementById("modal-img-wrap");
-    const $modalPrevPage = document.getElementById("modal-prev-page");
-    const $modalNextPage = document.getElementById("modal-next-page");
-    const $modalDots = document.getElementById("modal-dots");
-    const $modalDrawerToggle = document.getElementById("modal-drawer-toggle");
-    const $modalDrawerBody = document.getElementById("modal-drawer-body");
-    const $modalDrawerChevron = document.getElementById("modal-drawer-chevron");
-    const $modalSourceLine = document.getElementById("modal-source-line");
-    const $modalPdfLink = document.getElementById("modal-pdf-link");
-    const $modalPrevWork = document.getElementById("modal-prev-work");
-    const $modalNextWork = document.getElementById("modal-next-work");
+function esc(value) {
+  const names = { "&": "amp", "<": "lt", ">": "gt", '"': "quot", "'": "39" };
+  return String(value ?? "").replace(/[&<>"']/g, (ch) => "&" + (ch === "'" ? "#" : "") + names[ch] + ";");
+}
 
-    // THEME
-    function initTheme() {
-        const saved = localStorage.getItem("bac-theme");
-        const prefersDark = window.matchMedia(
-            "(prefers-color-scheme: dark)",
-        ).matches;
-        const isDark = saved ? saved === "dark" : prefersDark;
-        document.documentElement.classList.toggle("dark", isDark);
+function norm(value) {
+  return String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function getItem(id) {
+  return STUDY_ITEMS.find((item) => item.id === id) || null;
+}
+
+function labelOf(id) {
+  return CATEGORIES.find((cat) => cat.id === id)?.label || id;
+}
+
+function route() {
+  const raw = decodeURIComponent(location.hash.replace(/^#/, "").replace(/^\/+/, ""));
+  if (raw === "recap" || raw.startsWith("recap/")) return { name: "recap" };
+  if (raw.startsWith("studiu/")) {
+    const id = raw.slice(7).split(/[?#]/)[0];
+    if (id) return { name: "study", id };
+  }
+  return { name: "home" };
+}
+
+function studyHref(id) {
+  return "#/studiu/" + encodeURIComponent(id);
+}
+
+function pagesOf(item) {
+  const pages = [];
+  if (item.mindmap) pages.push({ src: item.mindmap, kind: "harta", scanIndex: 0 });
+  item.images.forEach((src, scanIndex) => pages.push({ src, kind: "scan", scanIndex }));
+  return pages;
+}
+
+function haystack(item) {
+  return [
+    item.title,
+    item.author,
+    item.movement,
+    item.year,
+    item.genre,
+    item.species,
+    item.remember,
+    item.conclusion,
+    ...(item.blocks || []).flatMap((block) => [block.title, ...block.points]),
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function siblings(id) {
+  const item = getItem(id);
+  if (!item) return { prev: null, next: null, index: 0, total: 0 };
+  const list = STUDY_ITEMS.filter((entry) => entry.category === item.category);
+  const index = list.findIndex((entry) => entry.id === id);
+  return {
+    prev: index > 0 ? list[index - 1] : null,
+    next: index >= 0 && index < list.length - 1 ? list[index + 1] : null,
+    index,
+    total: list.length,
+  };
+}
+
+function sameAuthor(item) {
+  if (!item.author) return [];
+  return STUDY_ITEMS.filter((entry) => entry.author === item.author && entry.id !== item.id);
+}
+
+function linkedCurrent(item) {
+  if (item.category === "curente" || item.category === "metode") return null;
+  const blob = norm((item.movement || "") + " " + (item.species || ""));
+  const rules = [
+    [/neomodern/, "curente-neomodernismul"],
+    [/simbol/, "curente-simbolismul"],
+    [/romant/, "curente-romantismul"],
+    [/ermet|modern/, "curente-modernismul"],
+    [/realis|balzac/, "curente-realismul"],
+  ];
+  for (const [pattern, id] of rules) {
+    if (pattern.test(blob)) return getItem(id);
+  }
+  return null;
+}
+
+function worksForCurrent(item) {
+  if (item.category !== "curente") return [];
+  const key = norm(item.title);
+  return STUDY_ITEMS.filter((other) => {
+    if (!other.movement || other.category === "curente") return false;
+    const movement = norm(other.movement);
+    if (key.startsWith("neomodern")) return movement.includes("neomodern");
+    if (key.startsWith("modern")) return movement.includes("modern") && !movement.includes("neomodern");
+    if (key.startsWith("simbol")) return movement.includes("simbol");
+    if (key.startsWith("romant")) return movement.includes("romant");
+    if (key.startsWith("realism")) return movement.includes("realis");
+    return false;
+  });
+}
+
+function markSeen(id) {
+  if (!progress.seen.includes(id)) {
+    progress.seen.push(id);
+    saveProgress();
+  }
+}
+
+function toggleReview(id) {
+  const on = progress.review.includes(id);
+  progress.review = on ? progress.review.filter((x) => x !== id) : progress.review.concat(id);
+  if (!on) progress.known = progress.known.filter((x) => x !== id);
+  saveProgress();
+}
+
+function shell(body, recapOn) {
+  const dark = document.documentElement.classList.contains("dark");
+  return (
+    '<header class="header">' +
+    '<a class="brand" href="#/" aria-label="Caiet BAC — acasă"><span class="mark">CB</span>' +
+    '<span class="brand-name hide-sm">Caiet <span>BAC</span></span></a>' +
+    '<nav class="nav"><a href="#/recap" class="' +
+    (recapOn ? "on" : "") +
+    '"><span class="show-sm">Recap</span><span class="hide-sm">Recapitulare</span></a>' +
+    '<button class="icon-btn" type="button" data-act="theme" aria-label="' +
+    (dark ? "Temă deschisă" : "Temă întunecată") +
+    '">' +
+    (dark ? "☀" : "☾") +
+    "</button></nav></header><main>" +
+    body +
+    "</main>"
+  );
+}
+
+function card(item) {
+  const thumb = item.images[0] || item.mindmap || "";
+  const review = progress.review.includes(item.id);
+  const poster = item.mindmap && !item.images.length;
+  return (
+    '<li><article class="card"><a class="hit" href="' +
+    studyHref(item.id) +
+    '">' +
+    '<div class="thumb' +
+    (poster ? " top" : "") +
+    '">' +
+    (thumb
+      ? '<img src="' + esc(thumb) + '" alt="" loading="lazy">'
+      : '<div style="display:grid;height:100%;place-items:center;font-family:var(--display);font-size:2rem;color:var(--accent)">' +
+        esc(item.title.slice(0, 1)) +
+        "</div>") +
+    '<span class="badge">' +
+    esc(labelOf(item.category)) +
+    "</span>" +
+    (item.mindmap ? '<span class="badge map">Hartă</span>' : "") +
+    '</div><div class="card-body"><h2>' +
+    esc(item.title) +
+    "</h2><p class=\"meta\">" +
+    esc([item.author, item.year].filter(Boolean).join(" · ") || item.movement || "") +
+    "</p>" +
+    (item.species ? "<p>" + esc(item.species) + "</p>" : "") +
+    '<p class="meta" style="margin-top:auto;padding-top:.6rem;text-transform:uppercase;font-size:.75rem;font-weight:700">' +
+    (item.images.length
+      ? item.images.length + (item.images.length === 1 ? " pagină" : " pagini")
+      : "Fișă") +
+    (item.remember ? " · de reținut" : "") +
+    "</p></div></a>" +
+    '<button class="star' +
+    (review ? " on" : "") +
+    '" type="button" data-act="review" data-id="' +
+    esc(item.id) +
+    '" aria-pressed="' +
+    review +
+    '" aria-label="' +
+    (review ? "Scoate de la repetat" : "Pune la repetat") +
+    '">' +
+    (review ? "★" : "☆") +
+    "</button></article></li>"
+  );
+}
+
+function home() {
+  const q = norm(ui.query.trim());
+  const filtered = STUDY_ITEMS.filter((item) => {
+    if (ui.category !== "all" && item.category !== ui.category) return false;
+    if (ui.onlyMaps && !item.mindmap && !(item.blocks || []).length) return false;
+    if (ui.onlyReview && !progress.review.includes(item.id)) return false;
+    if (!q) return true;
+    return norm(haystack(item)).includes(q);
+  });
+  const maps = STUDY_ITEMS.filter((item) => item.mindmap).length;
+  const pills = CATEGORIES.map(
+    (cat) =>
+      '<button class="pill' +
+      (ui.category === cat.id ? " on" : "") +
+      '" type="button" data-act="cat" data-id="' +
+      esc(cat.id) +
+      '">' +
+      esc(cat.label) +
+      "</button>",
+  ).join("");
+  let body =
+    '<div class="wrap"><p class="kicker">Limba și literatura română</p><h1>Materiale de studiu</h1>' +
+    '<p class="lead">' +
+    STUDY_ITEMS.length +
+    " fișe, " +
+    maps +
+    " hărți mentale, " +
+    progress.known.length +
+    " știute. Pe telefon citești punctele; posterul îl mărești când vrei toată harta.</p>" +
+    '<div class="toolbar"><label class="search"><span class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden">Caută</span>' +
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>' +
+    '<input id="search-input" value="' +
+    esc(ui.query) +
+    '" placeholder="Titlu, autor, curent, idee…"></label>' +
+    '<div class="views"><button type="button" data-act="view" data-id="fise" class="' +
+    (ui.view === "fise" ? "on" : "") +
+    '">Fișe</button><button type="button" data-act="view" data-id="programa" class="' +
+    (ui.view === "programa" ? "on" : "") +
+    '">Programă</button></div></div>';
+
+  if (ui.view === "fise") {
+    body +=
+      '<div class="pills">' +
+      pills +
+      '<button class="pill' +
+      (ui.onlyMaps ? " on-accent" : "") +
+      '" type="button" data-act="maps">Cu hartă</button>' +
+      '<button class="pill' +
+      (ui.onlyReview ? " on-accent" : "") +
+      '" type="button" data-act="only-review">De repetat' +
+      (progress.review.length ? " · " + progress.review.length : "") +
+      "</button></div>";
+  }
+  body +=
+    '<p class="meta">' +
+    (ui.view === "fise"
+      ? filtered.length +
+        (filtered.length === 1 ? " rezultat" : " rezultate") +
+        " · " +
+        progress.seen.length +
+        " deschise"
+      : "Programă orientativă pentru subiectul al III-lea. Rândurile cu fișă se deschid.") +
+    "</p>";
+  body += ui.view === "programa" ? syllabus() : filtered.length ? '<ul class="cards">' + filtered.map(card).join("") + "</ul>" : '<p class="lead" style="text-align:center;padding:3rem 0">Niciun rezultat.</p>';
+  body += '<p class="foot">Sursele originale sunt la fiecare fișă. Hărțile mentale stau lângă comentariile scanate, nu le înlocuiesc.</p></div>';
+  return body;
+}
+
+function syllabus() {
+  const q = norm(ui.query.trim());
+  const rows = SYLLABUS.filter((row) => {
+    if (!q) return true;
+    return norm(row.era + " " + row.period + " " + row.orientation + " " + row.species + " " + row.work).includes(q);
+  });
+  if (!rows.length) return '<p class="lead">Nicio operă din programă nu se potrivește.</p>';
+  const groups = [];
+  rows.forEach((row) => {
+    const key = row.era + "|||" + row.period;
+    const last = groups[groups.length - 1];
+    if (!last || last.key !== key) groups.push({ key, era: row.era, period: row.period, footnote: row.footnote, rows: [row] });
+    else last.rows.push(row);
+  });
+  return (
+    '<div class="groups">' +
+    groups
+      .map((group) => {
+        const items = group.rows
+          .map((row) => {
+            const inner =
+              '<p class="meta" style="color:var(--accent);font-weight:700">' +
+              esc(row.orientation) +
+              '</p><p style="font-family:var(--display);font-size:1.1rem;font-weight:650;margin:.2rem 0">' +
+              esc(row.work) +
+              '</p><p class="meta">' +
+              esc(row.species) +
+              "</p><p class=\"meta\" style=\"margin-top:.5rem;font-weight:700;color:var(--stamp)\">" +
+              (row.studyId ? "Deschide fișa" : "Doar în programă, fără scanări aici") +
+              "</p>";
+            return "<li>" + (row.studyId ? '<a href="' + studyHref(row.studyId) + '">' + inner + "</a>" : "<article>" + inner + "</article>") + "</li>";
+          })
+          .join("");
+        return (
+          "<section><p class=\"meta\" style=\"text-transform:uppercase;font-size:.75rem;font-weight:700\">" +
+          esc(group.era) +
+          "</p><h2>" +
+          esc(group.period) +
+          "</h2>" +
+          (group.footnote ? '<p class="meta">' + esc(group.footnote) + "</p>" : "") +
+          '<ul class="rows">' +
+          items +
+          "</ul></section>"
+        );
+      })
+      .join("") +
+    "</div>"
+  );
+}
+
+function workLink(item) {
+  const thumb = item.mindmap || item.images[0];
+  return (
+    "<li><a href=\"" +
+    studyHref(item.id) +
+    '">' +
+    (thumb ? '<img src="' + esc(thumb) + '" alt="">' : "") +
+    "<span><strong style=\"font-family:var(--display)\">" +
+    esc(item.title) +
+    '</strong><span class="meta" style="display:block">' +
+    esc(item.author || item.movement || "") +
+    "</span></span></a></li>"
+  );
+}
+
+function study(item) {
+  markSeen(item.id);
+  const pages = pagesOf(item);
+  if (ui.page >= pages.length) ui.page = 0;
+  const page = pages[ui.page];
+  const scans = pages.filter((entry) => entry.kind === "scan").length;
+  const pageLabel = !page
+    ? "Fără imagine"
+    : page.kind === "harta"
+      ? "Hartă mentală"
+      : scans > 1
+        ? "Pagina " + (page.scanIndex + 1) + " / " + scans
+        : "Comentariu";
+  const nav = siblings(item.id);
+  const review = progress.review.includes(item.id);
+  const blocks = (item.blocks || [])
+    .map(
+      (block) =>
+        '<article class="block"><h2>' +
+        esc(block.title) +
+        "</h2><ul>" +
+        block.points
+          .map((point) => "<li><span class=\"dot\"></span><span>" + esc(point) + "</span></li>")
+          .join("") +
+        "</ul></article>",
+    )
+    .join("");
+  const current = linkedCurrent(item);
+  const related = worksForCurrent(item);
+  const authorWorks = sameAuthor(item);
+  let media = "";
+  if (page) {
+    const thumbs = pages
+      .map(
+        (entry, index) =>
+          '<button type="button" class="' +
+          (index === ui.page ? "on" : "") +
+          '" data-act="page" data-id="' +
+          index +
+          '" aria-label="' +
+          (entry.kind === "harta" ? "Hartă mentală" : "Pagina " + (entry.scanIndex + 1)) +
+          '"><img src="' +
+          esc(entry.src) +
+          '" alt=""></button>',
+      )
+      .join("");
+    media =
+      '<div class="stage-box"><div class="stage-head"><p style="margin:0;font-weight:700">' +
+      esc(pageLabel) +
+      '</p><button class="btn solid no-print" type="button" data-act="zoom">Mărește</button></div>' +
+      '<div class="stage" data-stage><button type="button" data-act="zoom" aria-label="Mărește ' +
+      esc(item.title) +
+      '" style="border:0;background:transparent;padding:0;width:100%"><img src="' +
+      esc(page.src) +
+      '" alt="' +
+      esc(page.kind === "harta" ? "Hartă mentală: " + item.title : item.title + ", pagina " + (page.scanIndex + 1)) +
+      '"></button></div>' +
+      (pages.length > 1
+        ? '<div class="pager no-print"><button class="btn" type="button" data-act="step" data-id="-1"' +
+          (ui.page === 0 ? " disabled" : "") +
+          '>← Anterior</button><strong>' +
+          (ui.page + 1) +
+          " / " +
+          pages.length +
+          '</strong><button class="btn" type="button" data-act="step" data-id="1"' +
+          (ui.page === pages.length - 1 ? " disabled" : "") +
+          '>Următor →</button></div><div class="film no-print">' +
+          thumbs +
+          "</div>"
+        : "") +
+      "</div>";
+  } else {
+    media = '<p class="sheet">Fișa asta are doar punctele de mai jos, fără scanare.</p>';
+  }
+
+  let html =
+    '<div class="wrap"><a class="back" href="#/">← Toate fișele</a>' +
+    '<p class="meta" style="float:right;font-weight:700">' +
+    esc(labelOf(item.category)) +
+    (nav.total > 1 ? " · " + (nav.index + 1) + " / " + nav.total : "") +
+    "</p>" +
+    '<div class="title-row"><div><h1>' +
+    esc(item.title) +
+    '</h1><p class="meta" style="font-size:1.05rem">' +
+    esc([item.author, item.year, item.movement].filter(Boolean).join(" · ") || labelOf(item.category)) +
+    "</p>" +
+    (item.species ? "<p>" + esc(item.species) + "</p>" : "") +
+    "</div>" +
+    '<button class="btn no-print' +
+    (review ? " accent" : "") +
+    '" type="button" data-act="review" data-id="' +
+    esc(item.id) +
+    '" aria-pressed="' +
+    review +
+    '">' +
+    (review ? "La repetat" : "Pune la repetat") +
+    "</button></div>";
+  if (item.remember) html += '<p class="remember"><strong>De reținut: </strong>' + esc(item.remember) + "</p>";
+  if (page) html += '<a class="jump no-print" href="#material">Vezi harta sau paginile</a>';
+  html +=
+    '<div class="study"><section class="material" id="material">' +
+    media +
+    '</section><aside class="notes">' +
+    (blocks || '<p class="sheet">Pentru opera asta ai comentariul scanat. Deschide paginile și mărește-le ca să citești liniile.</p>') +
+    (item.conclusion ? '<p class="sheet">' + esc(item.conclusion) + "</p>" : "") +
+    (item.source
+      ? '<p class="meta">Sursă originală: <a href="' +
+        esc(item.source) +
+        '" target="_blank" rel="noreferrer" style="color:var(--accent);font-weight:700;word-break:break-all">' +
+        esc(item.source) +
+        "</a></p>"
+      : "") +
+    "</aside></div>";
+  if (current) html += '<p>Curent: <a href="' + studyHref(current.id) + '" style="color:var(--accent);font-weight:700">' + esc(current.title) + "</a></p>";
+  if (related.length) html += "<h2>Opere din " + esc(item.title.toLowerCase()) + '</h2><ul class="links">' + related.map(workLink).join("") + "</ul>";
+  if (authorWorks.length) html += "<h2>Tot de " + esc(item.author) + '</h2><ul class="links">' + authorWorks.map(workLink).join("") + "</ul>";
+  html += '<nav class="sibs no-print">';
+  html += nav.prev
+    ? '<a href="' + studyHref(nav.prev.id) + '"><span class="meta">Anterior</span><strong style="display:block;font-family:var(--display);font-size:1.15rem">' + esc(nav.prev.title) + "</strong></a>"
+    : "<span></span>";
+  if (nav.next) {
+    html +=
+      '<a href="' +
+      studyHref(nav.next.id) +
+      '" style="text-align:right"><span class="meta">Următor</span><strong style="display:block;font-family:var(--display);font-size:1.15rem">' +
+      esc(nav.next.title) +
+      "</strong></a>";
+  }
+  html += "</nav></div>";
+  if (ui.zoom && page) html += zoom(item, page, pageLabel, pages.length > 1);
+  return html;
+}
+
+function zoom(item, page, pageLabel, canStep) {
+  const wide = ui.scale > 1;
+  return (
+    '<div class="zoom" role="dialog" aria-modal="true" aria-label="' +
+    esc(pageLabel) +
+    '"><div class="zoom-bar"><p>' +
+    esc(item.title) +
+    " · " +
+    esc(pageLabel) +
+    '</p><button type="button" data-act="scale" data-id="-1" aria-label="Micșorează">−</button><span>' +
+    Math.round(ui.scale * 100) +
+    '%</span><button type="button" data-act="scale" data-id="1" aria-label="Mărește">+</button><button type="button" data-act="close" aria-label="Închide">Închide</button></div>' +
+    '<div class="zoom-view" data-zoom><img src="' +
+    esc(page.src) +
+    '" alt="' +
+    esc(item.title) +
+    '" style="' +
+    (wide ? "width:" + ui.scale * 90 + "vw;max-width:none;max-height:none" : "") +
+    '"></div>' +
+    (canStep
+      ? '<div class="zoom-nav"><button type="button" data-act="step" data-id="-1">← Anterior</button><button type="button" data-act="step" data-id="1" style="margin-left:auto">Următor →</button></div>'
+      : "") +
+    "</div>"
+  );
+}
+
+function recap() {
+  const pool = STUDY_ITEMS.filter((item) => ui.recapCat === "all" || item.category === ui.recapCat);
+  const due = pool.filter((item) => progress.review.includes(item.id));
+  const fresh = pool.filter((item) => !progress.known.includes(item.id));
+  const queue = due.length ? due : fresh.length ? fresh : pool;
+  const item = queue.length ? queue[ui.recapCursor % queue.length] : null;
+  const knownCount = STUDY_ITEMS.filter((entry) => progress.known.includes(entry.id)).length;
+  const pills = CATEGORIES.map(
+    (cat) =>
+      '<button class="pill' +
+      (ui.recapCat === cat.id ? " on" : "") +
+      '" type="button" data-act="recap-cat" data-id="' +
+      esc(cat.id) +
+      '">' +
+      esc(cat.label) +
+      "</button>",
+  ).join("");
+  let cardHtml = '<p class="lead" style="text-align:center">Nimic în categoria asta.</p>';
+  if (item) {
+    cardHtml =
+      '<article class="flash"><p class="meta">' +
+      esc([item.author, item.year, item.species].filter(Boolean).join(" · ") || item.movement || "") +
+      "</p><h2 style=\"font-size:clamp(1.7rem,4vw,2.3rem);margin:.3rem 0 0\">" +
+      esc(item.title) +
+      "</h2>" +
+      (ui.recapShown
+        ? '<div style="margin-top:1rem;font-size:1.15rem;line-height:1.5">' +
+          (item.remember ? "<p><strong>De reținut: </strong>" + esc(item.remember) + "</p>" : "") +
+          (item.conclusion ? "<p>" + esc(item.conclusion) + "</p>" : "") +
+          (item.movement ? '<p class="meta">' + esc(item.movement) + "</p>" : "") +
+          "</div>"
+        : '<p class="meta" style="font-size:1.1rem">An, curent, specie, formula de reținut.</p>') +
+      '<div class="actions">' +
+      (ui.recapShown
+        ? '<button class="btn" type="button" data-act="again">Mai repet</button><button class="btn solid" type="button" data-act="known">Știam</button>'
+        : '<button class="btn accent" type="button" data-act="show">Arată răspunsul</button>') +
+      '<a class="btn" href="' +
+      studyHref(item.id) +
+      '" style="color:var(--accent)">Deschide fișa</a></div></article>';
+  }
+  return (
+    '<div class="wrap" style="max-width:52rem"><p class="kicker">Recapitulare</p><h1>Spune formula, apoi verifică</h1>' +
+    '<p class="lead">' +
+    knownCount +
+    " știute din " +
+    STUDY_ITEMS.length +
+    '. Dacă ai fișe puse la repetat, apar primele.</p><div class="progress" role="progressbar" aria-valuenow="' +
+    knownCount +
+    '" aria-valuemin="0" aria-valuemax="' +
+    STUDY_ITEMS.length +
+    '"><span style="width:' +
+    (knownCount / STUDY_ITEMS.length) * 100 +
+    '%"></span></div><div class="pills">' +
+    pills +
+    "</div>" +
+    cardHtml +
+    "</div>"
+  );
+}
+
+function render(scroll) {
+  const search = document.getElementById("search-input");
+  const caret = search && document.activeElement === search ? search.selectionStart : null;
+  const current = route();
+  let title = "Caiet BAC · Limba și literatura română";
+  let body = "";
+  if (current.name === "recap") {
+    title = "Recapitulare · Caiet BAC";
+    body = recap();
+  } else if (current.name === "study") {
+    const item = getItem(current.id);
+    if (!item) {
+      title = "Fișă · Caiet BAC";
+      body = '<div class="wrap" style="text-align:center;padding:4rem 1rem"><h1>Fișa nu există</h1><p><a href="#/">Toate fișele</a></p></div>';
+    } else {
+      title = item.title + " · Caiet BAC";
+      body = study(item);
     }
-    $themeToggle.addEventListener("click", () => {
-        const isDark = document.documentElement.classList.toggle("dark");
-        localStorage.setItem("bac-theme", isDark ? "dark" : "light");
-    });
-
-    // FILTER PILLS
-    function renderPills() {
-        $pills.innerHTML = "";
-        CATEGORIES.forEach((cat) => {
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.textContent = cat.label;
-            btn.className =
-                "pill " +
-                (state.category === cat.id ? "pill-active" : "pill-inactive");
-            btn.addEventListener("click", () => {
-                state.category = cat.id;
-                applyFilters();
-                renderPills();
-            });
-            $pills.appendChild(btn);
-        });
+  } else {
+    body = home();
+  }
+  document.title = title;
+  document.getElementById("app").innerHTML = shell(body, current.name === "recap");
+  if (caret != null) {
+    const next = document.getElementById("search-input");
+    if (next) {
+      next.focus();
+      next.setSelectionRange(caret, caret);
     }
-
-    // SEARCH + FILTER
-    function normalize(str) {
-        return (str || "")
-            .toString()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase();
-    }
-
-    function applyFilters() {
-        const q = normalize(state.query.trim());
-        state.filtered = STUDY_ITEMS.filter((item) => {
-            const matchesCategory =
-                state.category === "all" || item.category === state.category;
-            if (!matchesCategory) return false;
-            if (!q) return true;
-            const haystack =
-                normalize(item.title) + " " + normalize(item.author || "");
-            return haystack.includes(q);
-        });
-        renderGrid();
-    }
-
-    $search.addEventListener("input", (e) => {
-        state.query = e.target.value;
-        applyFilters();
-    });
-
-    // keyboard shortcuts: "/" or Ctrl/Cmd+K focuses search
-    document.addEventListener("keydown", (e) => {
-        const tag =
-            (document.activeElement && document.activeElement.tagName) || "";
-        const typing = tag === "INPUT" || tag === "TEXTAREA";
-
-        if (!state.modal.open) {
-            if (
-                (e.key === "/" && !typing) ||
-                ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k")
-            ) {
-                e.preventDefault();
-                $search.focus();
-                $search.select();
-            }
-            return;
-        }
-
-        // modal is open — handle its own shortcuts
-        if (e.key === "Escape") {
-            closeModal();
-            return;
-        }
-        if (e.key === "ArrowLeft") {
-            e.preventDefault();
-            stepPage(-1);
-            return;
-        }
-        if (e.key === "ArrowRight") {
-            e.preventDefault();
-            stepPage(1);
-            return;
-        }
-    });
-
-    // GRID / CARDS
-    function renderGrid() {
-        $grid.innerHTML = "";
-        $count.textContent =
-            state.filtered.length +
-            (state.filtered.length === 1 ? " rezultat" : " rezultate");
-
-        if (state.filtered.length === 0) {
-            $grid.classList.add("hidden");
-            $empty.classList.remove("hidden");
-            $empty.classList.add("flex");
-            return;
-        }
-        $grid.classList.remove("hidden");
-        $empty.classList.add("hidden");
-        $empty.classList.remove("flex");
-
-        const frag = document.createDocumentFragment();
-        state.filtered.forEach((item, idx) => {
-            frag.appendChild(buildCard(item, idx));
-        });
-        $grid.appendChild(frag);
-    }
-
-    function catLabel(id) {
-        const found = CATEGORIES.find((c) => c.id === id);
-        return found ? found.label : id;
-    }
-
-    function buildCard(item, idx) {
-        const card = document.createElement("article");
-        card.className = "study-card group";
-        card.setAttribute("role", "button");
-        card.setAttribute("tabindex", "0");
-        card.setAttribute("aria-label", "Deschide " + item.title);
-
-        const thumb = item.images && item.images[0] ? item.images[0] : "";
-        const pageCount = item.images ? item.images.length : 0;
-
-        card.innerHTML = `
-      <div class="relative aspect-[4/3] bg-slate-100 dark:bg-slate-800 overflow-hidden">
-        <img src="${thumb}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async"
-             class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300" />
-        ${pageCount > 1 ? `<span class="absolute bottom-2 right-2 text-[11px] font-semibold px-1.5 py-0.5 rounded-md bg-slate-900/70 text-white backdrop-blur-sm">${pageCount} pag.</span>` : ""}
-      </div>
-      <div class="p-4">
-        <span class="tag ${TAG_CLASS[item.category] || "tag-repere"}">${escapeHtml(catLabel(item.category))}</span>
-        <h3 class="mt-2 font-display font-semibold text-[1.05rem] leading-snug tracking-tight line-clamp-2">${escapeHtml(item.title)}</h3>
-        ${item.author ? `<p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">${escapeHtml(item.author)}</p>` : ""}
-      </div>
-    `;
-
-        const open = () => openModal(idx);
-        card.addEventListener("click", open);
-        card.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                open();
-            }
-        });
-
-        return card;
-    }
-
-    function escapeHtml(str) {
-        const div = document.createElement("div");
-        div.textContent = str == null ? "" : str;
-        return div.innerHTML;
-    }
-
-    // MODAL / FOCUS VIEWER
-    function openModal(workIndex) {
-        state.modal.open = true;
-        state.modal.workIndex = workIndex;
-        state.modal.pageIndex = 0;
-        state.modal.zoomed = false;
-        $modalRoot.classList.remove("hidden");
-        document.body.style.overflow = "hidden";
-        renderModal();
-    }
-
-    function closeModal() {
-        state.modal.open = false;
-        $modalRoot.classList.add("hidden");
-        document.body.style.overflow = "";
-    }
-
-    function currentWork() {
-        return state.filtered[state.modal.workIndex];
-    }
-
-    function renderModal() {
-        const work = currentWork();
-        if (!work) {
-            closeModal();
-            return;
-        }
-
-        $modalTitle.textContent = work.title;
-        $modalAuthor.textContent = work.author || catLabel(work.category);
-
-        const total = work.images.length;
-        const page = Math.min(state.modal.pageIndex, total - 1);
-        state.modal.pageIndex = page;
-
-        $modalPageIndicator.textContent =
-            total > 1 ? `${page + 1} / ${total}` : "";
-        $modalPageIndicator.classList.toggle("hidden", total <= 1);
-
-        setImage(work.images[page]);
-
-        // page dots
-        $modalDots.innerHTML = "";
-        if (total > 1) {
-            work.images.forEach((_, i) => {
-                const dot = document.createElement("button");
-                dot.type = "button";
-                dot.setAttribute("aria-label", "Pagina " + (i + 1));
-                dot.className = "dot " + (i === page ? "dot-active" : "");
-                dot.addEventListener("click", () => {
-                    state.modal.pageIndex = i;
-                    renderModal();
-                });
-                $modalDots.appendChild(dot);
-            });
-        }
-
-        $modalPrevPage.disabled = page <= 0;
-        $modalNextPage.disabled = page >= total - 1;
-        $modalPrevPage.classList.toggle("hidden", total <= 1);
-        $modalNextPage.classList.toggle("hidden", total <= 1);
-
-        // drawer / source
-        if (work.source) {
-            $modalSourceLine.innerHTML = `Sursă originală: <a href="${escapeHtml(work.source)}" target="_blank" rel="noopener" class="text-accent hover:underline break-all">${escapeHtml(work.source)}</a>`;
-        } else {
-            $modalSourceLine.textContent =
-                "Sursă originală neindicată pentru acest material.";
-        }
-        if (work.pdf) {
-            $modalPdfLink.href = work.pdf;
-            $modalPdfLink.classList.remove("hidden");
-        } else {
-            $modalPdfLink.classList.add("hidden");
-        }
-
-        $modalPrevWork.disabled = state.modal.workIndex <= 0;
-        $modalNextWork.disabled =
-            state.modal.workIndex >= state.filtered.length - 1;
-        $modalPrevWork.style.opacity = $modalPrevWork.disabled ? ".35" : "1";
-        $modalNextWork.style.opacity = $modalNextWork.disabled ? ".35" : "1";
-    }
-
-    function setImage(src) {
-        state.modal.zoomed = false;
-        $modalImg.style.transform = "scale(1)";
-        $modalImg.classList.remove("cursor-zoom-out");
-        $modalImg.classList.add("cursor-zoom-in");
-        $modalImg.src = src;
-    }
-
-    function stepPage(delta) {
-        const work = currentWork();
-        if (!work) return;
-        const next = state.modal.pageIndex + delta;
-        if (next < 0 || next >= work.images.length) return;
-        state.modal.pageIndex = next;
-        renderModal();
-    }
-
-    function stepWork(delta) {
-        const next = state.modal.workIndex + delta;
-        if (next < 0 || next >= state.filtered.length) return;
-        state.modal.workIndex = next;
-        state.modal.pageIndex = 0;
-        renderModal();
-    }
-
-    $modalClose.addEventListener("click", closeModal);
-    $modalBackdrop.addEventListener("click", closeModal);
-    $modalPrevPage.addEventListener("click", () => stepPage(-1));
-    $modalNextPage.addEventListener("click", () => stepPage(1));
-    $modalPrevWork.addEventListener("click", () => stepWork(-1));
-    $modalNextWork.addEventListener("click", () => stepWork(1));
-
-    $modalDrawerToggle.addEventListener("click", () => {
-        const hidden = $modalDrawerBody.classList.toggle("hidden");
-        $modalDrawerChevron.style.transform = hidden
-            ? "rotate(0deg)"
-            : "rotate(180deg)";
-    });
-
-    // double-click / double-tap to zoom (simple pinch-friendly zoom toggle)
-    $modalImg.addEventListener("dblclick", () => {
-        state.modal.zoomed = !state.modal.zoomed;
-        $modalImg.style.transform = state.modal.zoomed
-            ? "scale(2)"
-            : "scale(1)";
-        $modalImg.classList.toggle("cursor-zoom-in", !state.modal.zoomed);
-        $modalImg.classList.toggle("cursor-zoom-out", state.modal.zoomed);
-    });
-
-    // trackpad pinch (Chrome/Edge fire wheel + ctrlKey on pinch gestures)
-    $modalImgWrap.addEventListener(
-        "wheel",
-        (e) => {
-            if (!e.ctrlKey) return;
-            e.preventDefault();
-            const current =
-                parseFloat(
-                    (/scale\(([\d.]+)\)/.exec($modalImg.style.transform) || [
-                        0, 1,
-                    ])[1],
-                ) || 1;
-            const next = Math.min(3, Math.max(1, current - e.deltaY * 0.01));
-            $modalImg.style.transform = `scale(${next})`;
-            state.modal.zoomed = next > 1.02;
-        },
-        { passive: false },
+  }
+  if (scroll) window.scrollTo(0, 0);
+  const stage = document.querySelector("[data-stage]");
+  if (stage) {
+    let start = null;
+    stage.addEventListener(
+      "touchstart",
+      (event) => {
+        if (event.touches.length === 1) start = event.touches[0].clientX;
+      },
+      { passive: true },
     );
+    stage.addEventListener("touchend", (event) => {
+      if (start == null) return;
+      const dx = event.changedTouches[0].clientX - start;
+      start = null;
+      if (Math.abs(dx) > 48) step(dx < 0 ? 1 : -1);
+    });
+  }
+}
 
-    // swipe left/right on mobile to change pages
-    (function enableSwipe() {
-        let startX = null,
-            startY = null;
-        $modalImgWrap.addEventListener(
-            "touchstart",
-            (e) => {
-                if (e.touches.length !== 1) return;
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-            },
-            { passive: true },
-        );
-        $modalImgWrap.addEventListener(
-            "touchend",
-            (e) => {
-                if (startX === null) return;
-                const endX = (e.changedTouches[0] || {}).clientX ?? startX;
-                const endY = (e.changedTouches[0] || {}).clientY ?? startY;
-                const dx = endX - startX,
-                    dy = endY - startY;
-                if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-                    stepPage(dx < 0 ? 1 : -1);
-                }
-                startX = null;
-                startY = null;
-            },
-            { passive: true },
-        );
-    })();
+function step(delta) {
+  const current = route();
+  if (current.name !== "study") return;
+  const item = getItem(current.id);
+  if (!item) return;
+  const total = pagesOf(item).length;
+  const next = ui.page + delta;
+  if (next < 0 || next >= total) return;
+  ui.page = next;
+  ui.scale = 1;
+  render(false);
+}
 
-    // INIT
-    initTheme();
-    renderPills();
-    applyFilters();
-})();
+function answer(remembered) {
+  const pool = STUDY_ITEMS.filter((item) => ui.recapCat === "all" || item.category === ui.recapCat);
+  const due = pool.filter((item) => progress.review.includes(item.id));
+  const fresh = pool.filter((item) => !progress.known.includes(item.id));
+  const queue = due.length ? due : fresh.length ? fresh : pool;
+  const item = queue[ui.recapCursor % queue.length];
+  if (!item) return;
+  if (remembered) {
+    if (!progress.known.includes(item.id)) progress.known.push(item.id);
+    progress.review = progress.review.filter((id) => id !== item.id);
+    if (!progress.seen.includes(item.id)) progress.seen.push(item.id);
+  } else {
+    if (!progress.review.includes(item.id)) progress.review.push(item.id);
+    progress.known = progress.known.filter((id) => id !== item.id);
+    if (!progress.seen.includes(item.id)) progress.seen.push(item.id);
+  }
+  saveProgress();
+  ui.recapShown = false;
+  ui.recapCursor += 1;
+  render(false);
+}
+
+document.addEventListener("click", (event) => {
+  const el = event.target.closest("[data-act]");
+  if (!el) return;
+  const act = el.dataset.act;
+  if (act === "theme") {
+    const next = !document.documentElement.classList.contains("dark");
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("caiet-theme", next ? "dark" : "light");
+    render(false);
+  } else if (act === "cat") {
+    ui.category = el.dataset.id;
+    render(false);
+  } else if (act === "view") {
+    ui.view = el.dataset.id;
+    render(false);
+  } else if (act === "maps") {
+    ui.onlyMaps = !ui.onlyMaps;
+    render(false);
+  } else if (act === "only-review") {
+    ui.onlyReview = !ui.onlyReview;
+    render(false);
+  } else if (act === "review") {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleReview(el.dataset.id);
+    render(false);
+  } else if (act === "zoom") {
+    ui.zoom = true;
+    ui.scale = 1;
+    render(false);
+  } else if (act === "close") {
+    ui.zoom = false;
+    ui.scale = 1;
+    render(false);
+  } else if (act === "step") {
+    step(Number(el.dataset.id));
+  } else if (act === "page") {
+    ui.page = Number(el.dataset.id);
+    ui.scale = 1;
+    render(false);
+  } else if (act === "scale") {
+    ui.scale = Math.min(4, Math.max(1, ui.scale + Number(el.dataset.id) * 0.25));
+    render(false);
+  } else if (act === "recap-cat") {
+    ui.recapCat = el.dataset.id;
+    ui.recapCursor = 0;
+    ui.recapShown = false;
+    render(false);
+  } else if (act === "show") {
+    ui.recapShown = true;
+    render(false);
+  } else if (act === "known") {
+    answer(true);
+  } else if (act === "again") {
+    answer(false);
+  }
+});
+
+document.addEventListener("input", (event) => {
+  if (event.target.id === "search-input") {
+    ui.query = event.target.value;
+    render(false);
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  const tag = document.activeElement?.tagName.toLowerCase() || "";
+  const typing = tag === "input" || tag === "textarea";
+  if (typing) {
+    if (event.key === "Escape") document.activeElement.blur();
+    return;
+  }
+  if (event.key === "/" || ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k")) {
+    const input = document.getElementById("search-input");
+    if (input) {
+      event.preventDefault();
+      input.focus();
+    }
+  } else if (event.key === "Escape" && ui.zoom) {
+    ui.zoom = false;
+    ui.scale = 1;
+    render(false);
+  } else if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    step(-1);
+  } else if (event.key === "ArrowRight") {
+    event.preventDefault();
+    step(1);
+  } else if ((event.key === "+" || event.key === "=") && ui.zoom) {
+    ui.scale = Math.min(4, ui.scale + 0.25);
+    render(false);
+  } else if ((event.key === "-" || event.key === "_") && ui.zoom) {
+    ui.scale = Math.max(1, ui.scale - 0.25);
+    render(false);
+  }
+});
+
+let lastHash = location.hash;
+window.addEventListener("hashchange", () => {
+  if (location.hash !== lastHash) {
+    lastHash = location.hash;
+    ui.page = 0;
+    ui.zoom = false;
+    ui.scale = 1;
+    render(true);
+  }
+});
+
+render(false);
