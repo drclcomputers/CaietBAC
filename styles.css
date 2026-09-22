@@ -93,9 +93,38 @@ h1 { margin: 0.2rem 0 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
   box-shadow: var(--shadow);
 }
 .search svg { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--muted); }
-.views { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-.views button, .pill { border-color: var(--line); background: var(--sheet); }
-.views button.on, .pill.on { background: var(--ink); color: var(--paper); border-color: transparent; }
+.views {
+  display: inline-flex;
+  align-self: flex-start;
+  gap: 0.15rem;
+  padding: 0.22rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--sheet);
+  box-shadow: var(--shadow);
+}
+.views button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.views button svg { flex: none; }
+.views button.on {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 1px 2px rgb(30 27 46 / 0.18);
+}
+.pill { border-color: var(--line); background: var(--sheet); }
+.pill.on { background: var(--ink); color: var(--paper); border-color: transparent; }
 .pill.on-accent { background: var(--accent); color: var(--on-accent); border-color: transparent; }
 .pills { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.25rem; margin-top: 0.9rem; }
 .meta { color: var(--muted); font-size: 0.92rem; }
@@ -197,7 +226,6 @@ h1 { margin: 0.2rem 0 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
 @media (min-width: 700px) {
   .wrap { padding-inline: 1.5rem; }
   .toolbar { flex-direction: row; align-items: center; }
-  .views { display: flex; }
   .pills { flex-wrap: wrap; overflow: visible; }
   .actions { flex-direction: row; }
   .actions .btn { width: auto; flex: 1; }

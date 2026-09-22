@@ -252,11 +252,15 @@ function home() {
     '<input id="search-input" value="' +
     esc(ui.query) +
     '" placeholder="Titlu, autor, curent, idee…"></label>' +
-    '<div class="views"><button type="button" data-act="view" data-id="fise" class="' +
+    '<div class="views" role="tablist" aria-label="Felul listei"><button type="button" role="tab" data-act="view" data-id="fise" aria-selected="' +
+    (ui.view === "fise") +
+    '" class="' +
     (ui.view === "fise" ? "on" : "") +
-    '">Fișe</button><button type="button" data-act="view" data-id="programa" class="' +
+    '"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Fișe</button><button type="button" role="tab" data-act="view" data-id="programa" aria-selected="' +
+    (ui.view === "programa") +
+    '" class="' +
     (ui.view === "programa" ? "on" : "") +
-    '">Programă</button></div></div>';
+    '"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01" stroke-linecap="round"/></svg>Programă</button></div></div>';
 
   if (ui.view === "fise") {
     body +=
