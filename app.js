@@ -398,26 +398,26 @@ function study(item) {
       )
       .join("");
     media =
-      '<div class="stage-box"><div class="stage-head"><p style="margin:0;font-weight:700">' +
+      '<div class="stage-box"><div class="stage-head"><p data-label style="margin:0;font-weight:700">' +
       esc(pageLabel) +
       '</p><button class="btn solid no-print" type="button" data-act="zoom">Mărește</button></div>' +
       '<div class="stage" data-stage><button type="button" data-act="zoom" aria-label="Mărește ' +
       esc(item.title) +
-      '" style="border:0;background:transparent;padding:0;width:100%"><img src="' +
+      '" style="border:0;background:transparent;padding:0;width:100%;max-width:100%"><img data-main decoding="async" src="' +
       esc(page.src) +
       '" alt="' +
       esc(page.kind === "harta" ? "Hartă mentală: " + item.title : item.title + ", pagina " + (page.scanIndex + 1)) +
       '"></button></div>' +
       (pages.length > 1
-        ? '<div class="pager no-print"><button class="btn" type="button" data-act="step" data-id="-1"' +
+        ? '<div class="pager no-print"><button class="btn" type="button" data-act="step" data-id="-1" aria-label="Anterior"' +
           (ui.page === 0 ? " disabled" : "") +
-          '>← Anterior</button><strong>' +
+          '>← <span class="hide-sm">Anterior</span></button><strong data-count>' +
           (ui.page + 1) +
           " / " +
           pages.length +
-          '</strong><button class="btn" type="button" data-act="step" data-id="1"' +
+          '</strong><button class="btn" type="button" data-act="step" data-id="1" aria-label="Următor"' +
           (ui.page === pages.length - 1 ? " disabled" : "") +
-          '>Următor →</button></div><div class="film no-print">' +
+          '><span class="hide-sm">Următor</span> →</button></div><div class="film no-print">' +
           thumbs +
           "</div>"
         : "") +
@@ -427,11 +427,11 @@ function study(item) {
   }
 
   let html =
-    '<div class="wrap"><a class="back" href="#/">← Toate fișele</a>' +
-    '<p class="meta" style="float:right;font-weight:700">' +
+    '<div class="wrap"><div class="topbar"><a class="back" href="#/">← Toate fișele</a>' +
+    '<p class="meta" style="font-weight:700;margin:0">' +
     esc(labelOf(item.category)) +
     (nav.total > 1 ? " · " + (nav.index + 1) + " / " + nav.total : "") +
-    "</p>" +
+    "</p></div>" +
     '<div class="title-row"><div><h1>' +
     esc(item.title) +
     '</h1><p class="meta" style="font-size:1.05rem">' +
@@ -601,6 +601,14 @@ function render(scroll) {
     }
   }
   if (scroll) window.scrollTo(0, 0);
+  if (current.name === "study") {
+    const item = getItem(current.id);
+    if (item) {
+      const pages = pagesOf(item);
+      warmAround(pages, ui.page);
+      window.setTimeout(() => pages.forEach((page) => warm(page.src)), 300);
+    }
+  }
   const stage = document.querySelector("[data-stage]");
   if (stage) {
     let start = null;
@@ -620,6 +628,63 @@ function render(scroll) {
   }
 }
 
+function labelFor(pages, index) {
+  const page = pages[index];
+  if (!page) return "Fără imagine";
+  const scans = pages.filter((entry) => entry.kind === "scan").length;
+  if (page.kind === "harta") return "Hartă mentală";
+  if (scans > 1) return "Pagina " + (page.scanIndex + 1) + " / " + scans;
+  return "Comentariu";
+}
+
+const warmed = new Set();
+function warm(src) {
+  if (!src || warmed.has(src)) return;
+  warmed.add(src);
+  const img = new Image();
+  img.decoding = "async";
+  img.src = src;
+}
+
+function warmAround(pages, index) {
+  pages.forEach((page, i) => {
+    if (Math.abs(i - index) <= 2) warm(page.src);
+  });
+}
+
+function paintPage() {
+  const current = route();
+  if (current.name !== "study") return false;
+  const item = getItem(current.id);
+  const img = document.querySelector("[data-main]");
+  if (!item || !img) return false;
+  const pages = pagesOf(item);
+  const page = pages[ui.page];
+  if (!page) return false;
+  img.src = page.src;
+  img.alt = page.kind === "harta" ? "Hartă mentală: " + item.title : item.title + ", pagina " + (page.scanIndex + 1);
+  const label = document.querySelector("[data-label]");
+  if (label) label.textContent = labelFor(pages, ui.page);
+  const count = document.querySelector("[data-count]");
+  if (count) count.textContent = ui.page + 1 + " / " + pages.length;
+  document.querySelectorAll("[data-act=page]").forEach((button) => {
+    button.classList.toggle("on", Number(button.dataset.id) === ui.page);
+  });
+  document.querySelectorAll("[data-act=step][data-id='-1']").forEach((button) => {
+    button.disabled = ui.page === 0;
+  });
+  document.querySelectorAll("[data-act=step][data-id='1']").forEach((button) => {
+    button.disabled = ui.page === pages.length - 1;
+  });
+  const zoomImg = document.querySelector("[data-zoom] img");
+  if (zoomImg) {
+    zoomImg.src = page.src;
+    if (ui.scale <= 1) zoomImg.removeAttribute("style");
+  }
+  warmAround(pages, ui.page);
+  return true;
+}
+
 function step(delta) {
   const current = route();
   if (current.name !== "study") return;
@@ -630,7 +695,7 @@ function step(delta) {
   if (next < 0 || next >= total) return;
   ui.page = next;
   ui.scale = 1;
-  render(false);
+  if (!paintPage()) render(false);
 }
 
 function answer(remembered) {
@@ -692,9 +757,11 @@ document.addEventListener("click", (event) => {
   } else if (act === "step") {
     step(Number(el.dataset.id));
   } else if (act === "page") {
-    ui.page = Number(el.dataset.id);
+    const index = Number(el.dataset.id);
+    if (index === ui.page) return;
+    ui.page = index;
     ui.scale = 1;
-    render(false);
+    if (!paintPage()) render(false);
   } else if (act === "scale") {
     ui.scale = Math.min(4, Math.max(1, ui.scale + Number(el.dataset.id) * 0.25));
     render(false);
